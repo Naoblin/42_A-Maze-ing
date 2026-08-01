@@ -1,24 +1,46 @@
 from typing import Any
 
-KEYS = [WIDTH, HEIGHT, ENTRY, EXIT, OUTPUT_FILE, PERFECT]
+KEYS = ["WIDTH", "HEIGHT", "ENTRY", "EXIT", "OUTPUT_FILE", "PERFECT"]
 MIN_SIZE_LIMIT = 2
 
-def load_config() -> dict[str: Any]:
+def load_config(config_file: str) -> dict[str, Any]:
     config_dict: dict[str: str] = {}
 
     # Extracting KEY and VALUE from every line and adding it to a dictionray
-    with open("config.txt") as config_file:
-        for line in config_file:
+    with open(config_file) as config:
+        for line in config:
+            line = line.strip()
+            if not line or line.startswith('#'):
+                continue
             try:
                 key, value = check_key_value(line)
             except ValueError as e:
                 print(e)
+                break  # mozna by se zde hodilo ukoncit program pomoci sys.exit()
             else:
                 config_dict[key] = value
 
+    try:
+        check_entry_exit(config_dict)
+    except ValueError as e:
+        print(e)  # mozna by se zde hodilo ukoncit program pomoci sys.exit()
+
     return config_dict
 
-def check_key_value(key_value_pair: str) -> tuple(str, Any):
+
+def check_entry_exit(config: dict[str: Any]) -> None:
+    for gate in ["ENTRY", "EXIT"]:
+        x, y = config[gate]
+        if not (0 <= x < config["WIDTH"]):
+            raise ValueError(f"x coordinate of {gate} ({x}) is out of range "
+                             f"(0, {config['WIDTH']})")
+        if not (0 <= y < config["HEIGHT"]):
+            raise ValueError(f"y coordinate of {gate} ({x}) is out of range "
+                             f"(0, {config['HEIGHT']})")
+
+
+
+def check_key_value(key_value_pair: str) -> tuple[str, Any]:
 
     # get KEY and VALUE separated by '='
     separ_pair: list[str, str] = key_value_pair.split("=")
@@ -31,23 +53,29 @@ def check_key_value(key_value_pair: str) -> tuple(str, Any):
     if key != key.upper():
         raise ValueError("Wrong format, keys must be written in uppercase!")
     if key not in KEYS:
-        raise ValueError(f"Key '{key}' is not an allowed key. Allowed keys are: {KEYS}")
+        raise ValueError(f"'{key}' is not an allowed key. Allowed keys are: {KEYS}")
 
-    if (key == "WIDTH" or key == "HEIGHT") and key < MIN_SIZE_LIMIT:
-        raise ValueError(f"{key} cannot be less than {MIN_SIZE_LIMIT}")
+    if key == "WIDTH" or key == "HEIGHT":
+        value = int(value)
+        if value < MIN_SIZE_LIMIT:
+            raise ValueError(f"{key} cannot be less than {MIN_SIZE_LIMIT}")
 
     elif key == "ENTRY" or key == "EXIT":
         if len(value.split(",")) != 2:
-            raise ValueError(f"Wrong format of {key} key, exactly one ',' must be used. (x, y) coordinates of {key} must be written as {key}=x,y.")
+            raise ValueError(f"Wrong format of key {key}, exactly one ',' must be used. (x, y) coordinates of {key} must be written as {key}=x,y.")
         x, y = value.split(",")
-        x = int(x)
-        y = int(y)
-    # zasekl jsem se zde, protoze je potreba zkontrolovat, ze je souradnice x mezi 0 a WIDTH (obdobne pro y)
-    # v teto funkci ale nemam pristup do vytvoreneho slovniku a tedy hodnoty WIDTH
-    # asi budu muset tuto funki zjednodusit  a tuto kontrolu a ine presunout jinam
+        value = (int(x), int(y))
 
+    elif key == "PERFECT":
+        if value == "True":
+            value = True
+        elif value == "False":
+            value = False
+        else:
+            raise ValueError(f"Value {value} is not allowed for key {key}. Allowed values are 'True' od 'False'")
 
+    return key, value
 
 
 if __name__ == "__main__":
-    pass
+    print(load_config("config.txt"))
