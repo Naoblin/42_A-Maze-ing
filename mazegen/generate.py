@@ -9,5 +9,7 @@ def generate_maze(width: int, height: int):
 
     # zde bude kód pro vytvoření bludiště z grid (tj. bludiště se všemi stěnami)
 
+    
+
     return maze
     pass

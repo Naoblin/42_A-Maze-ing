@@ -2,11 +2,12 @@
 from .generate import generate_maze
 from .solve import solve_maze
 from .grid import Grid
+from .display import display_maze
 
 
 class MazeGenerator:
     def __init__(self, width: int, height: int, entry: tuple[int, int],
-                 exit: tuple[int, int], perfect: bool):
+                 exit: tuple[int, int], perfect: bool) -> None:
         self.width = width
         self.height = height
         self.entry = entry
@@ -31,3 +32,51 @@ class MazeGenerator:
 
     def solve(self):
         self.solution = solve_maze(self.maze)
+
+
+    def display(self):
+        display_maze(self.maze)
+
+        for x in range(self.height):
+            if x == 0:
+                print("██" * (self.width * 2 + 1))
+            for y in range(self.width):
+                if y == 0:
+                    print("██", end="")
+                print("  ", end="")
+
+                if self.maze.cells[x][y].walls["East"]:
+                    print("██", end="")
+                else:
+                    print("  ", end="")
+
+                if y == self.width - 1:
+                    # print("██")
+                    print()
+
+            for y in range(self.width):
+                if y == 0:
+                    print("██", end="")
+
+                if self.maze.cells[x][y].walls["South"]:
+                    print("██", end="")
+                else:
+                    print("  ", end="")
+
+                if (self.maze.cells[x][y].walls["South"] or
+                    self.maze.cells[x][y].walls["East"] or
+                    (self.maze.is_in_range(x, y + 1) and
+                     self.maze.cells[x, y + 1].walls["South"]) or
+                    (self.maze.is_in_range(x + 1, y) and
+                     self.maze.cells[x, y + 1].walls["East"])):
+                    print("██", end="")
+                else:
+                    print("  ", end="")
+
+                if y == self.width - 1:
+                    # print("██")
+                    print()
+        
+        # print("██" * (self.width * 2 + 1))
+
+

@@ -93,4 +93,4 @@ def check_key_value(key_value_pair: str) -> tuple[str, Any]:
 
 
 if __name__ == "__main__":
-    print(load_config("config.txt"))
+    print(load_config(sys.argv[1]))

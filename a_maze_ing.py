@@ -16,9 +16,10 @@ def main() -> None:
     print("test")
     # pro generování bludiště zavoláme
     maze.generate()
+    maze.display()
 
     # pro hledání řešení bludiště zavoláme
-    maze.solve()
+    # maze.solve()
 
 
 if __name__ == "__main__":

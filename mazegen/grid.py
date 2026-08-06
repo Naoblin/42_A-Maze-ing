@@ -31,8 +31,8 @@ class Grid:
     def __init__(self, width: int, height: int) -> None:
         self.width = width
         self.height = height
-        self.cells = [[Cell(x, y) for x in range(width)] for y in range(height)]
+        self.cells = [[Cell(x, y) for y in range(width)] for x in range(height)]
 
 
     def is_in_range(self, x: int, y: int) -> bool:
-        return 0 <= x < self.width and 0 <= y < self.height
+        return 0 <= y < self.width and 0 <= x < self.height
