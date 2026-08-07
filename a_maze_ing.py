@@ -8,9 +8,15 @@ def main() -> None:
     # že soubor existuje atd. - to asi zkontrolovat v processing_config() jeste
     
     param: dict[str, Any] = load_config(sys.argv[1])
-    maze = MazeGenerator(width=param["WIDTH"], height=param["HEIGHT"],
-                         entry=param["ENTRY"], exit=param["EXIT"],
-                         perfect=param["PERFECT"])
+
+    if "SEED" in param:
+        maze = MazeGenerator(width=param["WIDTH"], height=param["HEIGHT"],
+                            entry=param["ENTRY"], exit=param["EXIT"],
+                            perfect=param["PERFECT"], seed=param["SEED"])
+    else:
+        maze = MazeGenerator(width=param["WIDTH"], height=param["HEIGHT"],
+                            entry=param["ENTRY"], exit=param["EXIT"],
+                            perfect=param["PERFECT"])
 
     print(param)
     print("test")
