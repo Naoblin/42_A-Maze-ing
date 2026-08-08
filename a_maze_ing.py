@@ -18,8 +18,6 @@ def main() -> None:
                             entry=param["ENTRY"], exit=param["EXIT"],
                             perfect=param["PERFECT"])
 
-    print(param)
-    print("test")
     # pro generování bludiště zavoláme
     maze.generate()
     maze.display()
