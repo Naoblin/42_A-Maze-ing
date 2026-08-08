@@ -2,6 +2,7 @@ from typing import Any
 import sys
 
 KEYS = ["WIDTH", "HEIGHT", "ENTRY", "EXIT", "OUTPUT_FILE", "PERFECT"]
+KEYS_OPTIONAL = ["SEED"]
 MIN_SIZE_LIMIT = 2
 
 
@@ -39,6 +40,9 @@ def check_mandatory(config: dict[str, Any], config_file: str) -> None:
 
 
 def check_entry_exit(config: dict[str, Any]) -> None:
+    if config["ENTRY"] == config["EXIT"]:
+        raise ValueError("The 'ENTRY' and 'EXIT' coordinates cannot be the same!")
+    
     for gate in ["ENTRY", "EXIT"]:
         x, y = config[gate]
         if not (0 <= x < config["WIDTH"]):
@@ -63,7 +67,7 @@ def check_key_value(key_value_pair: str) -> tuple[str, Any]:
     value: Any = separ_pair[1].strip()
     if key != key.upper():
         raise ValueError("Wrong format, keys must be written in uppercase!")
-    if key not in KEYS:
+    if key not in KEYS and key not in KEYS_OPTIONAL:
         raise ValueError(f"'{key}' is not an allowed key. "
                          f"Allowed keys are: {KEYS}")
 
@@ -93,4 +97,4 @@ def check_key_value(key_value_pair: str) -> tuple[str, Any]:
 
 
 if __name__ == "__main__":
-    print(load_config("config.txt"))
+    print(load_config(sys.argv[1]))

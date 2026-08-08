@@ -2,12 +2,49 @@
 # pripadne muzeme jeste misto generate.py udělat složku generate ve které budou všechny soubory s kódem
 # ke generování bludiště
 from .grid import Grid
+from random import seed, randrange, choice
 
-
-def generate_maze(width: int, height: int):
+# zde bude kód pro vytvoření bludiště z grid (tj. bludiště se všemi stěnami)
+def generate_maze(height: int, width: int, seed_value: int = None):
     maze = Grid(width, height)
+    if seed_value:
+        seed(seed_value)
+    visited_cells: list[tuple[int, int]] = []
 
-    # zde bude kód pro vytvoření bludiště z grid (tj. bludiště se všemi stěnami)
+    # nahodne zvolit zacatek generovani bludiste
+    current_cell: tuple[int, int] = (randrange(height), randrange(width))
+    maze.get_cell(*current_cell).visit()
+    visited_cells.append(current_cell)
+
+    while visited_cells:
+        current_cell = visited_cells[-1]
+        x, y = current_cell
+        neighbour_cells: list[tuple[int, int, str]] = []
+        direction: str
+        for k in [y - 1, y + 1]:
+            if maze.is_in_range(x, k) and not maze.get_cell(x, k).is_visited:
+                if k < y:
+                    direction = "W"
+                else:
+                    direction = "E"
+                neighbour_cells.append((x, k, direction))
+
+        for k in [x - 1, x + 1]:
+            if maze.is_in_range(k, y) and not maze.get_cell(k, y).is_visited:
+                if k < x:
+                    direction = "N"
+                else:
+                    direction = "S"
+                neighbour_cells.append((k, y, direction))
+
+        if not neighbour_cells:
+            visited_cells.pop()
+            continue
+        else:
+            x, y, direction = choice(neighbour_cells)
+            maze.get_cell(*current_cell).remove_wall(direction)
+            maze.get_cell(x, y).remove_wall(direction, opposite=True)
+            visited_cells.append((x, y))
+            maze.get_cell(x, y).visit()
 
     return maze
-    pass
