@@ -1,5 +1,7 @@
 # Zde jsou dvě třídy, které dlouží k vytvoření datové struktury bludiště
 
+import sys
+
 class Cell:
     # slouží k uchování informací o dané buňce a k implementaci metod, které
     # tyto informace upravují
@@ -11,6 +13,8 @@ class Cell:
         self.is_forty_two: bool = False
         self.is_solution: bool = False
         self.is_reached_by: tuple[int, int] = None
+        self.is_entry: bool = False
+        self.is_exit: bool = False
 
 
     def visit(self) -> None:
@@ -19,6 +23,18 @@ class Cell:
 
     def add_to_forty_two(self) -> None:
         self.is_forty_two = True
+
+
+    def add_entry(self) -> None:
+        if self.is_forty_two:
+            raise ValueError("Entry cannot be located in the 42 logo")
+        self.is_entry = True
+
+
+    def add_exit(self) -> None:
+        if self.is_forty_two:
+            raise ValueError("Exit cannot be located in the 42 logo")
+        self.is_exit = True
 
 
     def remove_wall(self, direction: str, opposite: bool = False) -> None:
@@ -46,7 +62,10 @@ class Grid:
         self.width = width
         self.height = height
         self.cells = [[Cell(x, y) for y in range(width)] for x in range(height)]
-        self.create_forty_two()
+        try:
+            self.create_forty_two()
+        except ValueError as e:
+            print(str(e), file=sys.stderr)
 
 
     def is_in_range(self, x: int, y: int) -> bool:
@@ -90,7 +109,9 @@ class Grid:
     def create_forty_two(self):
         four: str = "SSEESS"
         two: str = "EESSWWSSEE"
-        
+
+        if self.width < 8 or self.height < 6:
+            raise ValueError("The maze is too small. It is generated without the '42' pattern")
         start: tuple[int, int] = (round((self.height - 6) / 2),
                                   round((self.width - 8) / 2))
         self.connect_cells(start, four)

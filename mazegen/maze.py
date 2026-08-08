@@ -4,6 +4,7 @@ from .solve import solve_maze
 from .grid import Grid
 from .display import display_maze
 from typing import Any
+import sys
 
 
 class MazeGenerator:
@@ -30,47 +31,15 @@ class MazeGenerator:
     # nevím ale, jestli je v programátorské praxi takovýto přístup ok
     def generate(self):
         self.maze = generate_maze(self.height, self.width, self.seed)
-        # self.maze = Grid(self.width, self.height)
+        try:
+            self.maze.get_cell(*self.entry).add_entry()
+            self.maze.get_cell(*self.exit).add_exit()
+        except ValueError as e:
+            sys.exit(str(e))
 
     def solve(self):
         self.solution = solve_maze(self.maze, self.entry, self.exit)
 
     def display(self):
-        # display_maze(self.maze)
+        display_maze(self.maze, self.height, self.width)
 
-        for x in range(self.height):
-            if x == 0:
-                print("██" * (self.width * 2 + 1))
-            for y in range(self.width):
-                if y == 0:
-                    print("██", end="")
-                if self.maze.get_cell(x, y).is_forty_two:
-                    print("██", end="")
-                else:
-                    print("  ", end="")
-
-                if self.maze.cells[x][y].walls["E"]:
-                    print("██", end="")
-                else:
-                    print("  ", end="")
-            print()
-
-            for y in range(self.width):
-                if y == 0:
-                    print("██", end="")
-
-                if self.maze.cells[x][y].walls["S"]:
-                    print("██", end="")
-                else:
-                    print("  ", end="")
-
-                if (self.maze.cells[x][y].walls["S"] or
-                    self.maze.cells[x][y].walls["E"] or
-                    (self.maze.is_in_range(x, y + 1) and
-                     self.maze.cells[x][y + 1].walls["S"]) or
-                    (self.maze.is_in_range(x + 1, y) and
-                     self.maze.cells[x + 1][y].walls["E"])):
-                    print("██", end="")
-                else:
-                    print("  ", end="")
-            print()

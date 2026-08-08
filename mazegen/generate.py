@@ -13,6 +13,12 @@ def generate_maze(height: int, width: int, seed_value: int = None):
 
     # nahodne zvolit zacatek generovani bludiste
     current_cell: tuple[int, int] = (randrange(height), randrange(width))
+    # obcas se stalo, ze chybela stena u 42. To nastalo, když se začýtek generování
+    # bludiště vybral právě do 42 a při generování bludiště došlo k probourání stěny
+    # teď už by to mělo být ok, protože vybíráme start generování tak dlouho, dokud není
+    # mimo 42
+    while maze.get_cell(*current_cell).is_forty_two:
+        current_cell = (randrange(height), randrange(width))
     maze.get_cell(*current_cell).visit()
     visited_cells.append(current_cell)
 
