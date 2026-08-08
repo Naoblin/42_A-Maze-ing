@@ -32,10 +32,8 @@ class MazeGenerator:
         self.maze = generate_maze(self.height, self.width, self.seed)
         # self.maze = Grid(self.width, self.height)
 
-
     def solve(self):
-        self.solution = solve_maze(self.maze)
-
+        self.solution = solve_maze(self.maze, self.entry, self.exit)
 
     def display(self):
         # display_maze(self.maze)
