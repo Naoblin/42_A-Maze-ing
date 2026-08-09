@@ -23,8 +23,9 @@ def main() -> None:
     maze.display()
 
     # pro hledání řešení bludiště zavoláme
-    # maze.solve()
-
+    print()
+    maze.solve()
+    maze.display()
 
 if __name__ == "__main__":
     main()

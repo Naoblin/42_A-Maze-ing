@@ -21,6 +21,8 @@ def display_maze(maze: Grid, height: int, width: int):
                 print(entry, end="")
             elif maze.get_cell(x, y).is_exit:
                 print(exit, end="")
+            elif maze.get_cell(x, y).is_solution:
+                print(solution, end="")
             else:
                 print(path, end="")
 
