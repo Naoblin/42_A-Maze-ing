@@ -15,8 +15,6 @@ class Cell:
         self.is_reached_by: tuple[int, int] = None
         self.is_entry: bool = False
         self.is_exit: bool = False
-        self.is_solution: bool = False
-        self.is_reached_by: tuple[int, int] = None
 
 
     def visit(self) -> None:
