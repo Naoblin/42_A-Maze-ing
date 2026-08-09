@@ -37,10 +37,8 @@ class MazeGenerator:
         except ValueError as e:
             sys.exit(str(e))
 
-
     def solve(self):
-        self.solution = solve_maze(self.maze)
-
+        self.solution = solve_maze(self.maze, self.entry, self.exit)
 
     def display(self):
         display_maze(self.maze, self.height, self.width)
