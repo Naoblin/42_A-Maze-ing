@@ -11,8 +11,11 @@ class Cell:
         self.walls: dict[str, bool] = {"N": True, "E": True, "S": True, "W": True}
         self.is_visited: bool = False
         self.is_forty_two: bool = False
+        self.is_solution: bool = False
+        self.is_reached_by: tuple[int, int] = None
         self.is_entry: bool = False
         self.is_exit: bool = False
+        self.path_direction = ""
 
 
     def visit(self) -> None:
@@ -73,6 +76,17 @@ class Grid:
     def get_cell(self, x: int, y: int) -> "Cell":
         return self.cells[x][y]
 
+    def get_opened_neighbours(self, x: int, y: int) -> dict[tuple[int, int]: str]:
+        neighbours: dict[tuple[int, int]: direction] = {}
+        if not self.get_cell(x, y).walls["N"]:
+            neighbours[x - 1, y] = "N"
+        if not self.get_cell(x, y).walls["E"]:
+            neighbours[x, y + 1] = "E"
+        if not self.get_cell(x, y).walls["S"]:
+            neighbours[x + 1, y] = "S"
+        if not self.get_cell(x, y).walls["W"]:
+            neighbours[x, y - 1] = "W"
+        return neighbours
 
     def connect_cells(self, start: tuple[int, int], path: str):
         x, y = start
