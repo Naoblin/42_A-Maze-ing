@@ -4,7 +4,19 @@
 from .grid import Grid
 
 
-def bfs(maze: Grid, entry: tuple, exit: tuple):
+def solve_maze(maze: Grid, entry: tuple[int, int], exit: tuple[int, int]) -> str:
+    # tělo funkce jsem vyplnil jen pro představu, nechávám na tobě :)
+    # solution: str = "ESEENNWNEES"
+    # return solution
+
+    # myslím, že nevadí, když znovu použiju is_visited
+    # jen si to nejdřív musím resetovat
+    # pro jistotu resetuju i is_solution
+    for x in range(maze.height):
+        for y in range(maze.width):
+            maze.get_cell(x, y).is_visited = False
+            maze.get_cell(x, y).is_solution = False
+
     queue: list[tuple[int, int]] = []
     solution: str = ""
 
@@ -25,27 +37,13 @@ def bfs(maze: Grid, entry: tuple, exit: tuple):
                 maze.get_cell(*neighbour).is_reached_by = current_cell
                 maze.get_cell(*neighbour).path_direction = direction
 
+    if current_cell != exit:
+        raise ValueError("No path between entry and exit")
+
     while current_cell != entry:
         maze.get_cell(*current_cell).is_solution = True
         current_cell = maze.get_cell(*current_cell).is_reached_by
         solution += maze.get_cell(*current_cell).path_direction
     solution = solution[::-1]
-    print(solution)
 
-def solve_maze(maze: Grid, entry: tuple[int, int], exit: tuple[int, int]):
-    # tělo funkce jsem vyplnil jen pro představu, nechávám na tobě :)
-    # solution: str = "ESEENNWNEES"
-    # return solution
-
-    # myslím, že nevadí, když znovu použiju is_visited
-    # jen si to nejdřív musím resetovat
-    # pro jistotu resetuju i is_solution
-    for x in range(maze.height):
-        for y in range(maze.width):
-            maze.get_cell(x, y).is_visited = False
-            maze.get_cell(x, y).is_solution = False
-
-    bfs(maze, entry, exit)
-    #for x in range(maze.height):
-    #    for y in range(maze.width):
-    #        print((x,y), ":", maze.get_cell(x, y).path_direction)
+    return solution

@@ -76,8 +76,8 @@ class Grid:
     def get_cell(self, x: int, y: int) -> "Cell":
         return self.cells[x][y]
 
-    def get_opened_neighbours(self, x: int, y: int) -> dict[tuple[int, int]: str]:
-        neighbours: dict[tuple[int, int]: direction] = {}
+    def get_opened_neighbours(self, x: int, y: int) -> dict[tuple[int, int], str]:
+        neighbours: dict[tuple[int, int], str] = {}
         if not self.get_cell(x, y).walls["N"]:
             neighbours[x - 1, y] = "N"
         if not self.get_cell(x, y).walls["E"]:
