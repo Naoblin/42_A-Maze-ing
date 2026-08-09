@@ -6,26 +6,31 @@ from .grid import Grid
 
 def bfs(maze: Grid, entry: tuple, exit: tuple):
     queue: list[tuple[int, int]] = []
+    solution: str = ""
 
-    current_cell: tuple[int, int] = exit
+    current_cell: tuple[int, int] = entry
     maze.get_cell(*current_cell).visit()
     queue.append(current_cell)
 
     while queue:
         current_cell = queue.pop(0)
-        if current_cell == entry:
+        if current_cell == exit:
+            solution += maze.get_cell(*exit).path_direction
             break
 
-        for neighbour in maze.get_opened_neighbours(*current_cell):
+        for neighbour, direction in maze.get_opened_neighbours(*current_cell).items():
             if not maze.get_cell(*neighbour).is_visited:
                 queue.append(neighbour)
                 maze.get_cell(*neighbour).visit()
                 maze.get_cell(*neighbour).is_reached_by = current_cell
+                maze.get_cell(*neighbour).path_direction = direction
 
-    while current_cell != exit:
-        #print(maze.get_cell(*current_cell).is_reached_by)
+    while current_cell != entry:
         maze.get_cell(*current_cell).is_solution = True
         current_cell = maze.get_cell(*current_cell).is_reached_by
+        solution += maze.get_cell(*current_cell).path_direction
+    solution = solution[::-1]
+    print(solution)
 
 def solve_maze(maze: Grid, entry: tuple[int, int], exit: tuple[int, int]):
     # tělo funkce jsem vyplnil jen pro představu, nechávám na tobě :)
@@ -41,6 +46,6 @@ def solve_maze(maze: Grid, entry: tuple[int, int], exit: tuple[int, int]):
             maze.get_cell(x, y).is_solution = False
 
     bfs(maze, entry, exit)
-    # for x in range(maze.height):
-    #     for y in range(maze.width):
-    #         print((x,y), ":", maze.get_cell(x, y).is_reached_by)
+    #for x in range(maze.height):
+    #    for y in range(maze.width):
+    #        print((x,y), ":", maze.get_cell(x, y).path_direction)

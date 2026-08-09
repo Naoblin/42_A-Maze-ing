@@ -15,6 +15,7 @@ class Cell:
         self.is_reached_by: tuple[int, int] = None
         self.is_entry: bool = False
         self.is_exit: bool = False
+        self.path_direction = ""
 
 
     def visit(self) -> None:
@@ -75,16 +76,16 @@ class Grid:
     def get_cell(self, x: int, y: int) -> "Cell":
         return self.cells[x][y]
 
-    def get_opened_neighbours(self, x: int, y: int) -> list[tuple[int, int]]:
-        neighbours: list[tuple[int, int]] = []
-        if self.get_cell(x, y).walls["N"] is False:
-            neighbours.append((x - 1, y))
-        if self.get_cell(x, y).walls["E"] is False:
-            neighbours.append((x, y + 1))
-        if self.get_cell(x, y).walls["S"] is False:
-            neighbours.append((x + 1, y))
-        if self.get_cell(x, y).walls["W"] is False:
-            neighbours.append((x, y - 1))
+    def get_opened_neighbours(self, x: int, y: int) -> dict[tuple[int, int]: str]:
+        neighbours: dict[tuple[int, int]: direction] = {}
+        if not self.get_cell(x, y).walls["N"]:
+            neighbours[x - 1, y] = "N"
+        if not self.get_cell(x, y).walls["E"]:
+            neighbours[x, y + 1] = "E"
+        if not self.get_cell(x, y).walls["S"]:
+            neighbours[x + 1, y] = "S"
+        if not self.get_cell(x, y).walls["W"]:
+            neighbours[x, y - 1] = "W"
         return neighbours
 
     def connect_cells(self, start: tuple[int, int], path: str):
