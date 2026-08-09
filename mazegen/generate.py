@@ -5,7 +5,7 @@ from .grid import Grid
 from random import seed, randrange, choice
 
 # zde bude kód pro vytvoření bludiště z grid (tj. bludiště se všemi stěnami)
-def generate_maze(height: int, width: int, seed_value: int = None):
+def generate_maze(height: int, width: int, perfect: bool, seed_value: int = None):
     maze = Grid(width, height)
     if seed_value:
         seed(seed_value)
@@ -53,4 +53,21 @@ def generate_maze(height: int, width: int, seed_value: int = None):
             visited_cells.append((x, y))
             maze.get_cell(x, y).visit()
 
+    if not perfect:
+        make_playable(maze)
+
     return maze
+
+
+def make_playable(maze: Grid):
+    for x in maze.height:
+        for y in maze.width:
+            if maze.get_cell(x, y).is_dead_end():
+                # vybrat nahodnou postavenou stenu ze seznamu sten
+                walls: list[] = maze.get_cell(x, y).get_walls()
+                wall = walls.pop()
+                # zkontrolovat, že to není stěna s okrajem, nebo s 42, jinak vybrat jinou
+                # zkontrolovat, že po odstranění stěny nevznikne prostor 3x3 a větší
+                # odstranit danou stěnu (pokud nějaká zbyla)
+
+

@@ -34,6 +34,22 @@ class Cell:
             raise ValueError("Exit cannot be located in the 42 logo")
         self.is_exit = True
 
+    def count_walls(self) -> None:
+        count: int = 0
+        for wall in self.walls:
+            if wall:
+                count += 1
+        return count
+
+    def get_walls(self) -> None:
+        walls: list[tuple[int, int, str]] = []
+        for side in "NESW":
+            if self.walls[side]:
+                walls.append()
+        return walls
+
+    def is_dead_end(self) -> None:
+        return self.count_walls() > 2
 
     def remove_wall(self, direction: str, opposite: bool = False) -> None:
         if direction in self.walls:

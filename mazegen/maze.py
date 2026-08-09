@@ -9,7 +9,7 @@ import sys
 
 class MazeGenerator:
     def __init__(self, width: int, height: int, entry: tuple[int, int],
-                 exit: tuple[int, int], perfect: bool, seed: Any = None) -> None:
+                 exit: tuple[int, int], perfect: bool = False, seed: Any = None) -> None:
         self.width = width
         self.height = height
         self.entry = entry
@@ -30,7 +30,7 @@ class MazeGenerator:
     # importované z jiných modulů, kde si každý budeme psát vlastní kódy
     # nevím ale, jestli je v programátorské praxi takovýto přístup ok
     def generate(self):
-        self.maze = generate_maze(self.height, self.width, self.seed)
+        self.maze = generate_maze(self.height, self.width, self.perfect, self.seed)
         try:
             self.maze.get_cell(*self.entry).add_entry()
             self.maze.get_cell(*self.exit).add_exit()
