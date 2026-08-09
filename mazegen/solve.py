@@ -17,11 +17,10 @@ def bfs(maze: Grid, entry: tuple, exit: tuple):
             break
 
         for neighbour in maze.get_opened_neighbours(*current_cell):
-            x, y = neighbour
             if not maze.get_cell(*neighbour).is_visited:
                 queue.append(neighbour)
                 maze.get_cell(*neighbour).visit()
-                maze.get_cell(*neighbour).is_reached_by = (current_cell)
+                maze.get_cell(*neighbour).is_reached_by = current_cell
 
     while current_cell != exit:
         #print(maze.get_cell(*current_cell).is_reached_by)
@@ -35,9 +34,11 @@ def solve_maze(maze: Grid, entry: tuple[int, int], exit: tuple[int, int]):
 
     # myslím, že nevadí, když znovu použiju is_visited
     # jen si to nejdřív musím resetovat
+    # pro jistotu resetuju i is_solution
     for x in range(maze.height):
         for y in range(maze.width):
             maze.get_cell(x, y).is_visited = False
+            maze.get_cell(x, y).is_solution = False
 
     bfs(maze, entry, exit)
     # for x in range(maze.height):
