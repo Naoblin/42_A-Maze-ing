@@ -60,14 +60,20 @@ def generate_maze(height: int, width: int, perfect: bool, seed_value: int = None
 
 
 def make_playable(maze: Grid):
-    for x in maze.height:
-        for y in maze.width:
-            if maze.get_cell(x, y).is_dead_end():
+    for x in range(maze.height):
+        for y in range(maze.width):
+            if maze.get_cell(x, y).is_dead_end() and not maze.get_cell(x, y).is_forty_two:
                 # vybrat nahodnou postavenou stenu ze seznamu sten
-                walls: list[] = maze.get_cell(x, y).get_walls()
-                wall = walls.pop()
-                # zkontrolovat, že to není stěna s okrajem, nebo s 42, jinak vybrat jinou
-                # zkontrolovat, že po odstranění stěny nevznikne prostor 3x3 a větší
-                # odstranit danou stěnu (pokud nějaká zbyla)
+                walls: list[str] = maze.get_cell(x, y).get_walls()
+                while walls:
+                    direction: str = walls.pop(randrange(len(walls)))
+                    # zkontrolovat, že to není stěna s okrajem, nebo s 42, jinak vybrat jinou
+                    neighbour = maze.get_neighbour(x, y, direction)
+                    if maze.is_in_range(*neighbour) and not maze.get_cell(*neighbour).is_forty_two:
+                        # TO DO: zkontrolovat, že po odstranění stěny nevznikne prostor 3x3 a větší
+                        # odstranit danou stěnu (pokud nějaká zbyla)
+                        maze.get_cell(x, y).remove_wall(direction)
+                        maze.get_cell(*neighbour).remove_wall(direction, opposite=True)
+                        break
 
 

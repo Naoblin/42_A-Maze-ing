@@ -37,21 +37,21 @@ class Cell:
             raise ValueError("Exit cannot be located in the 42 logo")
         self.is_exit = True
 
-    def count_walls(self) -> None:
+    def count_walls(self) -> int:
         count: int = 0
         for wall in self.walls:
-            if wall:
+            if self.walls[wall]:
                 count += 1
         return count
 
-    def get_walls(self) -> None:
-        walls: list[tuple[int, int, str]] = []
-        for side in "NESW":
-            if self.walls[side]:
-                walls.append()
+    def get_walls(self) -> list[str]:
+        walls: list[str] = []
+        for wall in self.walls:
+            if self.walls[wall]:
+                walls.append(wall)
         return walls
 
-    def is_dead_end(self) -> None:
+    def is_dead_end(self) -> int:
         return self.count_walls() > 2
 
     def remove_wall(self, direction: str, opposite: bool = False) -> None:
@@ -92,8 +92,20 @@ class Grid:
     def get_cell(self, x: int, y: int) -> "Cell":
         return self.cells[x][y]
 
+    def get_neighbour(self, x: int, y: int, site: str) -> tuple[int, int]:
+        if site == "N":
+            x -= 1
+        elif site == "S":
+            x += 1
+        elif site == "E":
+            y += 1
+        elif site == "W":
+            y -= 1
+        return x, y
+
+
     def get_opened_neighbours(self, x: int, y: int) -> dict[tuple[int, int]: str]:
-        neighbours: dict[tuple[int, int]: direction] = {}
+        neighbours: dict[tuple[int, int]: str] = {}
         if not self.get_cell(x, y).walls["N"]:
             neighbours[x - 1, y] = "N"
         if not self.get_cell(x, y).walls["E"]:
