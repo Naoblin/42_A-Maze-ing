@@ -164,16 +164,15 @@ class Grid:
         for k in [x - 1, x, x + 1]:
             for l in [y - 1, y, y + 1]:
                 if not self.is_in_range(k, l) or self.get_cell(k, l).is_forty_two:
-                    print(self.is_in_range(k, l))
                     return False
-                if self.get_cell(k, l).count_walls() > 0:
-                    return False
-                for side in "EW":
-                    if (self.get_cell(k + 1, l).walls[side] or
-                        self.get_cell(k - 1, l).walls[side]):
-                        return False
-                for side in "NS":
-                    if (self.get_cell(k, l + 1).walls[side] or
-                        self.get_cell(k, l - 1).walls[side]):
-                        return False
+        if self.get_cell(x, y).count_walls() > 0:
+            return False
+        for side in "EW":
+            if (self.get_cell(x + 1, y).walls[side] or
+                self.get_cell(x - 1, y).walls[side]):
+                return False
+        for side in "NS":
+            if (self.get_cell(x, y + 1).walls[side] or
+                self.get_cell(x, y - 1).walls[side]):
+                return False
         return True
