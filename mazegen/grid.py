@@ -54,7 +54,7 @@ class Cell:
     def is_dead_end(self) -> int:
         return self.count_walls() > 2
 
-    def remove_wall(self, direction: str, opposite: bool = False) -> None:
+    def remove_wall(self, direction: str, opposite: bool = False, inverse: bool = False) -> None:
         if direction in self.walls:
             if opposite:
                 opposite_walls: dict[str, str] = {
@@ -64,7 +64,7 @@ class Cell:
                     "W": "E"
                 }
                 direction = opposite_walls[direction]
-            self.walls[direction] = False
+            self.walls[direction] = inverse
         else:
             raise ValueError(f"Unknown direction '{direction}'. "
                              f"Allowed directions are {self.walls.keys()}.")
@@ -116,7 +116,7 @@ class Grid:
             neighbours[x, y - 1] = "W"
         return neighbours
 
-    def connect_cells(self, start: tuple[int, int], path: str):
+    def connect_cells(self, start: tuple[int, int], path: str) -> None:
         x, y = start
         self.get_cell(x, y).visit()
         self.get_cell(x, y).add_to_forty_two()
@@ -135,7 +135,7 @@ class Grid:
             self.get_cell(x, y).add_to_forty_two()
 
 
-    def create_forty_two(self):
+    def create_forty_two(self) -> None:
         four: str = "SSEESS"
         two: str = "EESSWWSSEE"
 
@@ -148,3 +148,32 @@ class Grid:
         start = start[0], start[1] + 4
         self.connect_cells(start, two)
 
+    def check_3x3_and_remove_wall(self, x, y, direction) -> bool:
+        self.get_cell(x, y).remove_wall(direction)
+        neighbour = self.get_neighbour(x, y, direction)
+        self.get_cell(*neighbour).remove_wall(direction, opposite=True)
+        for k in [x - 1, x, x + 1]:
+            for l in [y - 1, y, y + 1]:
+                if self.is_3x3(k, l):
+                    self.get_cell(x, y).remove_wall(direction, inverse=True)
+                    self.get_cell(*neighbour).remove_wall(direction, opposite=True, inverse=True)
+                    return False
+        return True
+
+    def is_3x3(self, x: int, y: int) -> bool:
+        for k in [x - 1, x, x + 1]:
+            for l in [y - 1, y, y + 1]:
+                if not self.is_in_range(k, l) or self.get_cell(k, l).is_forty_two:
+                    print(self.is_in_range(k, l))
+                    return False
+                if self.get_cell(k, l).count_walls() > 0:
+                    return False
+                for side in "EW":
+                    if (self.get_cell(k + 1, l).walls[side] or
+                        self.get_cell(k - 1, l).walls[side]):
+                        return False
+                for side in "NS":
+                    if (self.get_cell(k, l + 1).walls[side] or
+                        self.get_cell(k, l - 1).walls[side]):
+                        return False
+        return True

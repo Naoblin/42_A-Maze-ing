@@ -53,6 +53,20 @@ def generate_maze(height: int, width: int, perfect: bool, seed_value: int = None
             visited_cells.append((x, y))
             maze.get_cell(x, y).visit()
 
+    # dva for cykly pro vytvoreni prazdneho bloku 3x3 v maze
+    for i in range(3):
+        for j in range(2):
+            maze.get_cell(i, j).remove_wall("E")
+            maze.get_cell(i, j + 1).remove_wall("W")
+
+    for j in range(3):
+        for i in range(2):
+            maze.get_cell(i, j).remove_wall("S")
+            maze.get_cell(i + 1, j).remove_wall("N")
+
+    # otestovani metody check_3x3_and_remove_wall(), ze spravne vrati False, kdyz by se zadanz bod mel vyskytnout v prostoru 3x3
+    print(f"check: {maze.check_3x3_and_remove_wall(0, 0, 'E')}")  # toto melo vypsat False, ale vypsalo True. Proc?
+
     if not perfect:
         make_playable(maze)
 
@@ -72,8 +86,9 @@ def make_playable(maze: Grid):
                     if maze.is_in_range(*neighbour) and not maze.get_cell(*neighbour).is_forty_two:
                         # TO DO: zkontrolovat, že po odstranění stěny nevznikne prostor 3x3 a větší
                         # odstranit danou stěnu (pokud nějaká zbyla)
-                        maze.get_cell(x, y).remove_wall(direction)
-                        maze.get_cell(*neighbour).remove_wall(direction, opposite=True)
+                            # maze.check_3x3_and_remove_wall(x, y, direction)
+                        # maze.get_cell(x, y).remove_wall(direction)
+                        # maze.get_cell(*neighbour).remove_wall(direction, opposite=True)
                         break
 
 
