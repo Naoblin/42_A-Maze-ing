@@ -4,10 +4,10 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mazegen"
-version = "0.1.0"
+version = "1.0.0"
 description = "A tool for generating and solving perfect mazes."
 authors = [
-    { name="Lucie Nováková", email=lnovakov@student.42prague.com },
-    { name="Lukáš Novotný", email=lnovotny@student.42prague.com }
+    { name="Lucie Nováková", email="lnovakov@student.42prague.com" },
+    { name="Lukáš Novotný", email="lnovotny@student.42prague.com" }
 ]
 dependencies = []

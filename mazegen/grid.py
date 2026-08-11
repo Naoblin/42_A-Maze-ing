@@ -151,10 +151,10 @@ class Grid:
         four: str = "SSEESS"
         two: str = "EESSWWSSEE"
 
-        if self.width < 8 or self.height < 6:
+        if self.width < 9 or self.height < 7:
             raise ValueError("The maze is too small. It is generated without the '42' pattern")
-        start: tuple[int, int] = (round((self.height - 6) / 2),
-                                  round((self.width - 8) / 2))
+        start: tuple[int, int] = (((self.height - 4) // 2),
+                                  ((self.width - 6) // 2))
         self.connect_cells(start, four)
 
         start = start[0], start[1] + 4

@@ -45,11 +45,12 @@ def check_entry_exit(config: dict[str, Any]) -> None:
     
     for gate in ["ENTRY", "EXIT"]:
         x, y = config[gate]
-        if not (0 <= x < config["HEIGHT"]):
-            raise ValueError(f"The 'x' coordinate of {gate} ({x}) is out of "
-                             f"range (0, {config['HEIGHT']})")
-        if not (0 <= y < config["WIDTH"]):
+        # puvodni kod:x, y = config[gate]
+        if not (0 <= y < config["HEIGHT"]):
             raise ValueError(f"The 'y' coordinate of {gate} ({y}) is out of "
+                             f"range (0, {config['HEIGHT']})")
+        if not (0 <= x < config["WIDTH"]):
+            raise ValueError(f"The 'x' coordinate of {gate} ({x}) is out of "
                              f"range (0, {config['WIDTH']})")
 
 

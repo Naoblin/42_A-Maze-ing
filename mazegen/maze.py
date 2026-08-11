@@ -12,8 +12,8 @@ class MazeGenerator:
                  exit: tuple[int, int], perfect: bool = False, seed: Any = None) -> None:
         self.width = width
         self.height = height
-        self.entry = entry
-        self.exit = exit
+        self.entry = entry[1], entry[0]
+        self.exit = exit[1], exit[0]
         self.perfect = perfect
         self.seed = seed
         self.maze: Grid
@@ -52,6 +52,6 @@ class MazeGenerator:
                 file.write(line + "\n")
 
             file.write("\n")
-            file.write(f"{self.entry[0]}, {self.entry[1]}     # entry  (x, y)\n")
-            file.write(f"{self.exit[0]}, {self.exit[1]}     # exit  (x, y)\n")
+            file.write(f"{self.entry[1]}, {self.entry[0]}\n")
+            file.write(f"{self.exit[1]}, {self.exit[0]}\n")
             file.write(f"{self.solution}\n")
