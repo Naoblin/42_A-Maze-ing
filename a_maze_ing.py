@@ -26,6 +26,7 @@ def main() -> None:
     print()
     maze.solve()
     maze.display()
+    maze.make_output_file()
 
     print(maze.solution)
 

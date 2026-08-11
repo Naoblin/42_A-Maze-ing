@@ -5,7 +5,7 @@ from .grid import Grid
 from random import seed, randrange, choice
 
 # zde bude kód pro vytvoření bludiště z grid (tj. bludiště se všemi stěnami)
-def generate_maze(height: int, width: int, seed_value: int = None):
+def generate_maze(height: int, width: int, perfect: bool, seed_value: int = None):
     maze = Grid(width, height)
     if seed_value:
         seed(seed_value)
@@ -53,4 +53,53 @@ def generate_maze(height: int, width: int, seed_value: int = None):
             visited_cells.append((x, y))
             maze.get_cell(x, y).visit()
 
+    # TESTOVACÍ KÓD
+
+    # dva for cykly pro vytvoreni prazdneho bloku 3x3 v maze
+    # for i in range(3):
+    #     for j in range(2):
+    #         maze.get_cell(i, j).remove_wall("E")
+    #         maze.get_cell(i, j + 1).remove_wall("W")
+
+    # for j in range(3):
+    #     for i in range(2):
+    #         maze.get_cell(i, j).remove_wall("S")
+    #         maze.get_cell(i + 1, j).remove_wall("N")
+
+    # otestovani metody check_3x3_and_remove_wall(), ze spravne vrati False, kdyz by se zadanz bod mel vyskytnout v prostoru 3x3
+    # print(f"check: {maze.check_3x3_and_remove_wall(0, 0, 'E')}")  # toto melo vypsat False, ale vypsalo True. Proc?
+
+    # for i in range(height - 1):
+    #         for j in range(width - 1):
+    #             print(f"({i}, {j}): {maze.check_3x3_and_remove_wall(i, j, 'E')}")
+
+    # TEST: tohle vráti z celého maze True pouze pro (1, 1), což je dobře
+    # for i in range(height):
+    #     for j in range(width):
+    #         print(f"({i}, {j}): {maze.is_3x3(i, j)}")
+
+    if not perfect:
+        make_playable(maze)
+
     return maze
+
+
+def make_playable(maze: Grid):
+    for x in range(maze.height):
+        for y in range(maze.width):
+            if maze.get_cell(x, y).is_dead_end() and not maze.get_cell(x, y).is_forty_two:
+                # vybrat nahodnou postavenou stenu ze seznamu sten
+                walls: list[str] = maze.get_cell(x, y).get_walls()
+                while walls:
+                    direction: str = walls.pop(randrange(len(walls)))
+                    # zkontrolovat, že to není stěna s okrajem, nebo s 42, jinak vybrat jinou
+                    neighbour = maze.get_neighbour(x, y, direction)
+                    if maze.is_in_range(*neighbour) and not maze.get_cell(*neighbour).is_forty_two:
+                        # TO DO: zkontrolovat, že po odstranění stěny nevznikne prostor 3x3 a větší
+                        # odstranit danou stěnu (pokud nějaká zbyla)
+                        maze.check_3x3_and_remove_wall(x, y, direction)
+                        # maze.get_cell(x, y).remove_wall(direction)
+                        # maze.get_cell(*neighbour).remove_wall(direction, opposite=True)
+                        break
+
+
