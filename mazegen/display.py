@@ -1,7 +1,7 @@
 from .grid import Grid
 
 
-def display_maze(maze: Grid, height: int, width: int):
+def display_maze(maze: Grid, height: int, width: int, show_solution=True):
     wall = "██"
     path = "  "
     solution = "\x1b[31m◀▶\x1b[0m"
@@ -21,7 +21,7 @@ def display_maze(maze: Grid, height: int, width: int):
                 print(entry, end="")
             elif maze.get_cell(x, y).is_exit:
                 print(exit, end="")
-            elif maze.get_cell(x, y).is_solution:
+            elif show_solution and maze.get_cell(x, y).is_solution:
                 print(solution, end="")
             else:
                 print(path, end="")

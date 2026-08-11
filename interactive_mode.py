@@ -5,9 +5,11 @@ def display_interactive(maze: MazeGenerator):
     maze.generate()
     maze.solve()
     maze.make_output_file()
+    show_solution = True
     while True:
         os.system("clear")
-        maze.display()
+        print(show_solution)
+        maze.display(show_solution)
         menu = ("\n" +
                 "=== A-Maze-Ing ===\n" +
                 "Regenerate new maze     [1]\n" +
@@ -22,7 +24,7 @@ def display_interactive(maze: MazeGenerator):
             maze.solve()
             maze.make_output_file()
         if decision == "2":
-            pass
+            show_solution = not show_solution
         if decision == "3":
             pass
         if decision == "4":
