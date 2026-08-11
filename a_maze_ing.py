@@ -28,5 +28,7 @@ def main() -> None:
     maze.display()
     maze.make_output_file()
 
+    print(maze.solution)
+
 if __name__ == "__main__":
     main()
