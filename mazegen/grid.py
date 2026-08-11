@@ -69,6 +69,18 @@ class Cell:
             raise ValueError(f"Unknown direction '{direction}'. "
                              f"Allowed directions are {self.walls.keys()}.")
 
+    def get_hexadec(self) -> int:
+        total_walls: int = 0
+        if self.walls["N"]:
+            total_walls += 1
+        if self.walls["E"]:
+            total_walls += 2
+        if self.walls["S"]:
+            total_walls += 4
+        if self.walls["W"]:
+            total_walls += 8
+        return f"{total_walls:X}"
+
 
 class Grid:
     # slouží k evidování celé mřížky z buněk

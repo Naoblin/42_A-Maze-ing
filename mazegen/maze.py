@@ -43,3 +43,15 @@ class MazeGenerator:
     def display(self):
         display_maze(self.maze, self.height, self.width)
 
+    def make_output_file(self):
+        with open("output_maze.txt", "w") as file:
+            for x in range(self.height):
+                line: str = ""
+                for y in range(self.width):
+                    line += str(self.maze.get_cell(x, y).get_hexadec())
+                file.write(line + "\n")
+
+            file.write("\n")
+            file.write(f"{self.entry[0]}, {self.entry[1]}     # entry  (x, y)\n")
+            file.write(f"{self.exit[0]}, {self.exit[1]}     # exit  (x, y)\n")
+            file.write(f"{self.solution}\n")
