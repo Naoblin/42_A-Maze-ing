@@ -1,7 +1,8 @@
 from mazegen import MazeGenerator
 import os
 
-def display_interactive(maze: MazeGenerator):
+
+def display_interactive(maze: MazeGenerator) -> None:
     maze.generate()
     maze.solve()
     maze.make_output_file()
@@ -20,6 +21,9 @@ def display_interactive(maze: MazeGenerator):
                 "Exit                    [5]\n" +
                 "What's your choice? ")
         decision = input(menu)
+
+        while decision not in ("1", "2", "3", "4", "5"):
+            decision = input("Not a valid option, try again: ")
 
         if decision == "1":
             maze.generate()

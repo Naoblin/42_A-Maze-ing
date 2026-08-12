@@ -10,17 +10,20 @@ def load_config(config_file: str) -> dict[str, Any]:
     config_dict: dict[str, Any] = {}
 
     # Extracting KEY and VALUE from every line and adding it to a dictionray
-    with open(config_file) as config:
-        for line in config:
-            line = line.strip()
-            if not line or line.startswith('#'):
-                continue
-            try:
-                key, value = check_key_value(line)
-            except ValueError as e:
-                sys.exit(str(e))  # neplatny config file -> ukoncit program
-            else:
-                config_dict[key] = value
+    try:
+        with open(config_file) as config:
+            for line in config:
+                line = line.strip()
+                if not line or line.startswith('#'):
+                    continue
+                try:
+                    key, value = check_key_value(line)
+                except ValueError as e:
+                    sys.exit(str(e))  # neplatny config file -> ukoncit program
+                else:
+                    config_dict[key] = value
+    except OSError as e:
+        sys.exit(f"An error occured while opening the config file: {str(e)}")
 
     try:
         check_mandatory(config_dict, config_file)
@@ -41,16 +44,18 @@ def check_mandatory(config: dict[str, Any], config_file: str) -> None:
 
 def check_entry_exit(config: dict[str, Any]) -> None:
     if config["ENTRY"] == config["EXIT"]:
-        raise ValueError("The 'ENTRY' and 'EXIT' coordinates cannot be the same!")
-    
+        raise ValueError("The 'ENTRY' and 'EXIT' coordinates "
+                         "cannot be the same!")
+
     for gate in ["ENTRY", "EXIT"]:
         x, y = config[gate]
-        if not (0 <= x < config["HEIGHT"]):
-            raise ValueError(f"The 'x' coordinate of {gate} ({x}) is out of "
-                             f"range (0, {config['HEIGHT']})")
-        if not (0 <= y < config["WIDTH"]):
+        # puvodni kod:x, y = config[gate]
+        if not (0 <= y < config["HEIGHT"]):
             raise ValueError(f"The 'y' coordinate of {gate} ({y}) is out of "
-                             f"range (0, {config['WIDTH']})")
+                             f"range (0, {config['HEIGHT'] - 1})")
+        if not (0 <= x < config["WIDTH"]):
+            raise ValueError(f"The 'x' coordinate of {gate} ({x}) is out of "
+                             f"range (0, {config['WIDTH'] - 1})")
 
 
 def check_key_value(key_value_pair: str) -> tuple[str, Any]:
