@@ -12,7 +12,7 @@ class Cell:
         self.is_visited: bool = False
         self.is_forty_two: bool = False
         self.is_solution: bool = False
-        self.is_reached_by: tuple[int, int] = None
+        self.is_reached_by: tuple[int, int]
         self.is_entry: bool = False
         self.is_exit: bool = False
         self.path_direction = ""
