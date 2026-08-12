@@ -7,9 +7,53 @@ import sys
 
 
 class MazeGenerator:
+    """
+    A unified interface for generating, solving, displaying, and exporting mazes.
+
+    Parameters
+    ----------
+    width : int
+        The width (number of columns) of the maze.
+    height : int
+        The height (number of rows) of the maze.
+    entry : tuple[int, int]
+        The (x, y) coordinates for the maze entry.
+    exit : tuple[int, int]
+        The (x, y) coordinates for the maze exit.
+    perfect : bool, optional
+        If True, generates a perfect maze. Default is False.
+    seed : Any, optional
+        The seed for the random number generator. Default is None.
+
+    Attributes
+    ----------
+    maze : Grid
+        The internal grid structure. Populated by `generate()`.
+    solution : str
+        The string path from entry to exit. Populated by `solve()`.
+
+    Methods
+    -------
+    generate()
+        Generates the maze structure and sets the entry and exit points.
+    solve()
+        Finds the shortest path between the entry and exit.
+    display()
+        Prints a visual representation of the maze to the standard output.
+    make_output_file()
+        Exports the hexadecimal maze layout, coordinates, and solution 
+        into 'output_maze.txt'.
+    """
+
     def __init__(self, width: int, height: int, entry: tuple[int, int],
                  exit: tuple[int, int], perfect: bool = False, seed: Any = None
                  ) -> None:
+        """
+        Initialize the MazeGenerator instance.
+
+        Coordinates for entry and exit are automatically converted from
+        (x, y) input format to (row, column) internal layout.
+        """
         self.width = width
         self.height = height
         self.entry = entry[1], entry[0]
@@ -20,6 +64,19 @@ class MazeGenerator:
         self.solution: str
 
     def generate(self) -> None:
+        """
+        Generate the maze grid and apply the entry and exit points.
+
+        This method populates the `maze` attribute by delegating the core
+        logic to the `generate_maze` function. It then sets the specified
+        entry and exit cells. 
+
+        Raises
+        ------
+        SystemExit
+            If the entry or exit cannot be placed (e.g., they overlap 
+            with the forbidden '42' pattern), the program exits.
+        """
         self.maze = generate_maze(self.height, self.width, self.perfect,
                                   self.seed)
         try:
@@ -29,14 +86,47 @@ class MazeGenerator:
             sys.exit(str(e))
 
     def solve(self) -> None:
+        """
+        Find the shortest path from the entry to the exit.
+
+        This method populates the `solution` attribute with a string
+        representing the sequence of directions required to navigate 
+        the maze.
+        """
         self.solution = solve_maze(self.maze, self.entry, self.exit)
 
     def display(self, show_solution: bool = True, color_walls: int = 0,
                 color_42: int = 0) -> None:
+        """
+        Print a visual representation of the maze to the standard output.
+
+        Parameters
+        ----------
+        show_solution : bool, optional
+            Whether to display the solved path in the output. Default is True.
+        color_walls : int, optional
+            The ANSI color code to use for the walls. Default is 0.
+        color_42 : int, optional
+            The ANSI color code to use for the mandatory '42' pattern. 
+            Default is 0.
+        """
         display_maze(self.maze, self.height, self.width, show_solution,
                      color_walls, color_42)
 
     def make_output_file(self) -> None:
+        """
+        Export the maze layout and metadata to a text file.
+
+        The file is created as 'output_maze.txt' in the current working
+        directory. It contains the hexadecimal representation of the walls 
+        for each cell, followed by the entry coordinates, exit coordinates, 
+        and the solution path string.
+
+        Raises
+        ------
+        SystemExit
+            If an OSError occurs during the file writing process.
+        """
         try:
             with open("output_maze.txt", "w") as file:
                 for x in range(self.height):

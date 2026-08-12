@@ -7,9 +7,30 @@ MIN_SIZE_LIMIT = 2
 
 
 def load_config(config_file: str) -> dict[str, Any]:
+    """
+    Load and parse the maze configuration from a file.
+
+    Reads the specified file line by line, extracts key-value pairs, 
+    and validates them. It also performs mandatory key checks and 
+    coordinate boundary validation.
+
+    Parameters
+    ----------
+    config_file : str
+        The path to the configuration text file.
+
+    Returns
+    -------
+    dict[str, Any]
+        A dictionary containing the parsed configuration parameters.
+
+    Raises
+    ------
+    SystemExit
+        If the file cannot be opened or if any validation error occurs.
+    """
     config_dict: dict[str, Any] = {}
 
-    # Extracting KEY and VALUE from every line and adding it to a dictionray
     try:
         with open(config_file) as config:
             for line in config:
@@ -19,7 +40,7 @@ def load_config(config_file: str) -> dict[str, Any]:
                 try:
                     key, value = check_key_value(line)
                 except ValueError as e:
-                    sys.exit(str(e))  # neplatny config file -> ukoncit program
+                    sys.exit(str(e))
                 else:
                     config_dict[key] = value
     except OSError as e:
@@ -29,13 +50,26 @@ def load_config(config_file: str) -> dict[str, Any]:
         check_mandatory(config_dict, config_file)
         check_entry_exit(config_dict)
     except ValueError as e:
-        sys.exit(str(e))  # neplatny config file -> ukoncit program
+        sys.exit(str(e))
 
     return config_dict
 
 
 def check_mandatory(config: dict[str, Any], config_file: str) -> None:
-    # kontrola, ze vsechny mandatory klice byly pouzity v config file
+    """Ensure all mandatory configuration keys are present.
+
+    Parameters
+    ----------
+    config : dict[str, Any]
+        The dictionary of parsed configuration parameters.
+    config_file : str
+        The name of the configuration file, used for error reporting.
+
+    Raises
+    ------
+    ValueError
+        If any key from the mandatory KEYS list is missing.
+    """
     for key in KEYS:
         if key not in config:
             raise ValueError(f"The mandatory parameter {key} is missing "
@@ -43,13 +77,28 @@ def check_mandatory(config: dict[str, Any], config_file: str) -> None:
 
 
 def check_entry_exit(config: dict[str, Any]) -> None:
+    """
+    Validate the entry and exit coordinates.
+
+    Ensures that the entry and exit points are not identical and 
+    that their coordinates fall within the defined maze dimensions.
+
+    Parameters
+    ----------
+    config : dict[str, Any]
+        The dictionary containing 'ENTRY', 'EXIT', 'WIDTH', and 'HEIGHT'.
+
+    Raises
+    ------
+    ValueError
+        If the entry and exit are the same, or if they are out of bounds.
+    """
     if config["ENTRY"] == config["EXIT"]:
         raise ValueError("The 'ENTRY' and 'EXIT' coordinates "
                          "cannot be the same!")
 
     for gate in ["ENTRY", "EXIT"]:
         x, y = config[gate]
-        # puvodni kod:x, y = config[gate]
         if not (0 <= y < config["HEIGHT"]):
             raise ValueError(f"The 'y' coordinate of {gate} ({y}) is out of "
                              f"range (0, {config['HEIGHT'] - 1})")
@@ -59,15 +108,35 @@ def check_entry_exit(config: dict[str, Any]) -> None:
 
 
 def check_key_value(key_value_pair: str) -> tuple[str, Any]:
+    """
+    Parse and validate a single configuration line.
 
-    # get KEY and VALUE separated by '='
+    Splits a 'KEY=VALUE' string, checks if the key is allowed, and 
+    converts the value to its appropriate data type (integer, tuple, 
+    or boolean).
+
+    Parameters
+    ----------
+    key_value_pair : str
+        A single line from the configuration file.
+
+    Returns
+    -------
+    tuple[str, Any]
+        A tuple containing the parsed key and its typed value.
+
+    Raises
+    ------
+    ValueError
+        If the format is incorrect, the key is unknown, or the value 
+        is invalid for the given key.
+    """
     separ_pair: list[str] = key_value_pair.split("=")
     if len(separ_pair) != 2:
         raise ValueError("Wrong format, exactly one '=' must be used. "
                          "Key-Value pair must be written on one line "
                          "as 'KEY=VALUE'.")
 
-    # strip KEY and VALUE from whitespaces
     key: str = separ_pair[0].strip()
     value: Any = separ_pair[1].strip()
     if key != key.upper():

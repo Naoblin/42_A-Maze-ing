@@ -4,6 +4,24 @@ from .grid import Grid
 def display_maze(maze: Grid, height: int, width: int,
                  show_solution: bool = True, color_walls: int = 0,
                  color_42: int = 0) -> None:
+    """
+    Print a visual representation of the maze to the standard output.
+
+    Parameters
+    ----------
+    maze : Grid
+        The grid object containing the maze data.
+    height : int
+        The height (number of rows) of the maze.
+    width : int
+        The width (number of columns) of the maze.
+    show_solution : bool, optional
+        Whether to display the solved path in the output. Default is True.
+    color_walls : int, optional
+        The ANSI color index (0-5) to use for the walls. Default is 0.
+    color_42 : int, optional
+        The ANSI color index (0-5) to use for the '42' pattern. Default is 0.
+    """
     colors = [37, 36, 35, 34, 32, 31]
     wall = f"\x1b[{colors[color_walls]}m██\x1b[0m"
     path = "  "

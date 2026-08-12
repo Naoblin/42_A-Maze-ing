@@ -3,13 +3,31 @@ from .grid import Grid
 
 def solve_maze(maze: Grid, entry: tuple[int, int], exit: tuple[int, int]
                ) -> str:
-    # tělo funkce jsem vyplnil jen pro představu, nechávám na tobě :)
-    # solution: str = "ESEENNWNEES"
-    # return solution
+    """Find the shortest path from the entry to the exit.
 
-    # myslím, že nevadí, když znovu použiju is_visited
-    # jen si to nejdřív musím resetovat
-    # pro jistotu resetuju i is_solution
+    Uses Breadth-First Search (BFS) to traverse the maze and records 
+    the path directions. Resets visited statuses on the grid before running.
+
+    Parameters
+    ----------
+    maze : Grid
+        The grid object containing the maze layout.
+    entry : tuple[int, int]
+        The (row, column) coordinates of the starting cell.
+    exit : tuple[int, int]
+        The (row, column) coordinates of the destination cell.
+
+    Returns
+    -------
+    str
+        A string representing the sequence of directions (e.g., 'NESW') 
+        to navigate from the entry to the exit.
+
+    Raises
+    ------
+    ValueError
+        If no valid path exists between the entry and the exit.
+    """
     for x in range(maze.height):
         for y in range(maze.width):
             maze.get_cell(x, y).is_visited = False
