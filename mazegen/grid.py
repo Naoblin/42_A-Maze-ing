@@ -1,6 +1,5 @@
-# Zde jsou dvě třídy, které dlouží k vytvoření datové struktury bludiště
-
 import sys
+
 
 class Cell:
     # slouží k uchování informací o dané buňce a k implementaci metod, které
@@ -8,29 +7,33 @@ class Cell:
     def __init__(self, x: int, y: int) -> None:
         self.x = x
         self.y = y
-        self.walls: dict[str, bool] = {"N": True, "E": True, "S": True, "W": True}
+        self.walls: dict[str, bool] = {
+            "N": True,
+            "E": True,
+            "S": True,
+            "W": True
+        }
         self.is_visited: bool = False
         self.is_forty_two: bool = False
         self.is_solution: bool = False
+        # nevim, jestli je nekde v kodu nutne, aby zde byl None, doresime spolu
+        # bud dat pryc None, nebo upravit type hint na "tuple[int, int] | None"
+        # ale pak se to bude muset upravit i dal v kodu
         self.is_reached_by: tuple[int, int] = None
         self.is_entry: bool = False
         self.is_exit: bool = False
         self.path_direction = ""
 
-
     def visit(self) -> None:
         self.is_visited = True
 
-
     def add_to_forty_two(self) -> None:
         self.is_forty_two = True
-
 
     def add_entry(self) -> None:
         if self.is_forty_two:
             raise ValueError("Entry cannot be located in the 42 logo")
         self.is_entry = True
-
 
     def add_exit(self) -> None:
         if self.is_forty_two:
@@ -54,7 +57,8 @@ class Cell:
     def is_dead_end(self) -> int:
         return self.count_walls() > 2
 
-    def remove_wall(self, direction: str, opposite: bool = False, inverse: bool = False) -> None:
+    def remove_wall(self, direction: str, opposite: bool = False,
+                    inverse: bool = False) -> None:
         if direction in self.walls:
             if opposite:
                 opposite_walls: dict[str, str] = {
@@ -69,7 +73,7 @@ class Cell:
             raise ValueError(f"Unknown direction '{direction}'. "
                              f"Allowed directions are {self.walls.keys()}.")
 
-    def get_hexadec(self) -> int:
+    def get_hexadec(self) -> str:
         total_walls: int = 0
         if self.walls["N"]:
             total_walls += 1
@@ -90,16 +94,15 @@ class Grid:
     def __init__(self, width: int, height: int) -> None:
         self.width = width
         self.height = height
-        self.cells = [[Cell(x, y) for y in range(width)] for x in range(height)]
+        self.cells = [[Cell(x, y) for y in range(width)
+                       ] for x in range(height)]
         try:
             self.create_forty_two()
         except ValueError as e:
             print(str(e), file=sys.stderr)
 
-
     def is_in_range(self, x: int, y: int) -> bool:
         return 0 <= y < self.width and 0 <= x < self.height
-
 
     def get_cell(self, x: int, y: int) -> "Cell":
         return self.cells[x][y]
@@ -115,9 +118,9 @@ class Grid:
             y -= 1
         return x, y
 
-
-    def get_opened_neighbours(self, x: int, y: int) -> dict[tuple[int, int]: str]:
-        neighbours: dict[tuple[int, int]: str] = {}
+    def get_opened_neighbours(self, x: int, y: int
+                              ) -> dict[tuple[int, int], str]:
+        neighbours: dict[tuple[int, int], str] = {}
         if not self.get_cell(x, y).walls["N"]:
             neighbours[x - 1, y] = "N"
         if not self.get_cell(x, y).walls["E"]:
@@ -146,13 +149,13 @@ class Grid:
             self.get_cell(x, y).visit()
             self.get_cell(x, y).add_to_forty_two()
 
-
     def create_forty_two(self) -> None:
         four: str = "SSEESS"
         two: str = "EESSWWSSEE"
 
         if self.width < 9 or self.height < 7:
-            raise ValueError("The maze is too small. It is generated without the '42' pattern")
+            raise ValueError("The maze is too small. "
+                             "It is generated without the '42' pattern")
         start: tuple[int, int] = (((self.height - 4) // 2),
                                   ((self.width - 6) // 2))
         self.connect_cells(start, four)
@@ -160,31 +163,41 @@ class Grid:
         start = start[0], start[1] + 4
         self.connect_cells(start, two)
 
-    def check_3x3_and_remove_wall(self, x, y, direction) -> bool:
+    def check_3x3_and_remove_wall(self, x: int, y: int, direction: str
+                                  ) -> bool:
         self.get_cell(x, y).remove_wall(direction)
         neighbour = self.get_neighbour(x, y, direction)
         self.get_cell(*neighbour).remove_wall(direction, opposite=True)
-        for k in [x - 1, x, x + 1]:
-            for l in [y - 1, y, y + 1]:
-                if self.is_3x3(k, l):
+        for m in [x - 1, x, x + 1]:
+            for n in [y - 1, y, y + 1]:
+                if self.is_3x3(m, n):
                     self.get_cell(x, y).remove_wall(direction, inverse=True)
-                    self.get_cell(*neighbour).remove_wall(direction, opposite=True, inverse=True)
+                    self.get_cell(*neighbour).remove_wall(
+                        direction, opposite=True, inverse=True
+                    )
                     return False
         return True
 
     def is_3x3(self, x: int, y: int) -> bool:
-        for k in [x - 1, x, x + 1]:
-            for l in [y - 1, y, y + 1]:
-                if not self.is_in_range(k, l) or self.get_cell(k, l).is_forty_two:
+        for m in [x - 1, x, x + 1]:
+            for n in [y - 1, y, y + 1]:
+                if (
+                    not self.is_in_range(m, n) or
+                    self.get_cell(m, n).is_forty_two
+                ):
                     return False
         if self.get_cell(x, y).count_walls() > 0:
             return False
         for side in "EW":
-            if (self.get_cell(x + 1, y).walls[side] or
-                self.get_cell(x - 1, y).walls[side]):
+            if (
+                self.get_cell(x + 1, y).walls[side] or
+                self.get_cell(x - 1, y).walls[side]
+            ):
                 return False
         for side in "NS":
-            if (self.get_cell(x, y + 1).walls[side] or
-                self.get_cell(x, y - 1).walls[side]):
+            if (
+                self.get_cell(x, y + 1).walls[side] or
+                self.get_cell(x, y - 1).walls[side]
+            ):
                 return False
         return True

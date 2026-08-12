@@ -1,7 +1,9 @@
 from .grid import Grid
 
 
-def display_maze(maze: Grid, height: int, width: int, show_solution: bool = True, color_walls: int = 0, color_42: int = 0):
+def display_maze(maze: Grid, height: int, width: int,
+                 show_solution: bool = True, color_walls: int = 0,
+                 color_42: int = 0) -> None:
     colors = [37, 36, 35, 34, 32, 31]
     wall = f"\x1b[{colors[color_walls]}m██\x1b[0m"
     path = "  "
@@ -52,4 +54,3 @@ def display_maze(maze: Grid, height: int, width: int, show_solution: bool = True
             else:
                 print(path, end="")
         print()
-

@@ -1,7 +1,8 @@
 from mazegen import MazeGenerator
 import os
 
-def display_interactive(maze: MazeGenerator):
+
+def display_interactive(maze: MazeGenerator) -> None:
     maze.generate()
     maze.solve()
     maze.make_output_file()

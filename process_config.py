@@ -41,17 +41,18 @@ def check_mandatory(config: dict[str, Any], config_file: str) -> None:
 
 def check_entry_exit(config: dict[str, Any]) -> None:
     if config["ENTRY"] == config["EXIT"]:
-        raise ValueError("The 'ENTRY' and 'EXIT' coordinates cannot be the same!")
-    
+        raise ValueError("The 'ENTRY' and 'EXIT' coordinates "
+                         "cannot be the same!")
+
     for gate in ["ENTRY", "EXIT"]:
         x, y = config[gate]
         # puvodni kod:x, y = config[gate]
         if not (0 <= y < config["HEIGHT"]):
             raise ValueError(f"The 'y' coordinate of {gate} ({y}) is out of "
-                             f"range (0, {config['HEIGHT']})")
+                             f"range (0, {config['HEIGHT'] - 1})")
         if not (0 <= x < config["WIDTH"]):
             raise ValueError(f"The 'x' coordinate of {gate} ({x}) is out of "
-                             f"range (0, {config['WIDTH']})")
+                             f"range (0, {config['WIDTH'] - 1})")
 
 
 def check_key_value(key_value_pair: str) -> tuple[str, Any]:

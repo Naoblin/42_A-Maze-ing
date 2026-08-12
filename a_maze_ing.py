@@ -4,32 +4,38 @@ from interactive_mode import display_interactive
 import sys
 from typing import Any
 
+
 def main() -> None:
-    # dopsat asi dodatečné kontroly, že je správný počet parametrů při zavolání funkce
+    # dopsat asi dodatečné kontroly, že je
+    # správný počet parametrů při zavolání funkce
     # že soubor existuje atd. - to asi zkontrolovat v processing_config() jeste
-    
+
     param: dict[str, Any] = load_config(sys.argv[1])
 
     if "SEED" in param:
         maze = MazeGenerator(width=param["WIDTH"], height=param["HEIGHT"],
-                            entry=param["ENTRY"], exit=param["EXIT"],
-                            perfect=param["PERFECT"], seed=param["SEED"])
+                             entry=param["ENTRY"], exit=param["EXIT"],
+                             perfect=param["PERFECT"], seed=param["SEED"])
     else:
         maze = MazeGenerator(width=param["WIDTH"], height=param["HEIGHT"],
-                            entry=param["ENTRY"], exit=param["EXIT"],
-                            perfect=param["PERFECT"])
+                             entry=param["ENTRY"], exit=param["EXIT"],
+                             perfect=param["PERFECT"])
 
-    # pro generování bludiště zavoláme
-    maze.generate()
-    maze.display()
+    # # pro generování bludiště zavoláme
+    # maze.generate()
+    # maze.display()
 
-    # pro hledání řešení bludiště zavoláme
-    print()
-    maze.solve()
-    maze.display()
-    maze.make_output_file()
+    # # pro hledání řešení bludiště zavoláme
+    # print()
+    # maze.solve()
+    # maze.display()
+    # maze.make_output_file()
+
+    # vse vyse jsem zakomentoval, protoze je ted vsechno presunute do
+    # funkce display_interactive(maze)
 
     display_interactive(maze)
+
 
 if __name__ == "__main__":
     main()
