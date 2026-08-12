@@ -22,6 +22,9 @@ def display_interactive(maze: MazeGenerator) -> None:
                 "What's your choice? ")
         decision = input(menu)
 
+        while decision not in ("1", "2", "3", "4", "5"):
+            decision = input("Not a valid option, try again: ")
+
         if decision == "1":
             maze.generate()
             maze.solve()
