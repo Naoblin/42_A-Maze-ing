@@ -16,10 +16,7 @@ class Cell:
         self.is_visited: bool = False
         self.is_forty_two: bool = False
         self.is_solution: bool = False
-        # nevim, jestli je nekde v kodu nutne, aby zde byl None, doresime spolu
-        # bud dat pryc None, nebo upravit type hint na "tuple[int, int] | None"
-        # ale pak se to bude muset upravit i dal v kodu
-        self.is_reached_by: tuple[int, int] = None
+        self.is_reached_by: tuple[int, int]
         self.is_entry: bool = False
         self.is_exit: bool = False
         self.path_direction = ""
