@@ -40,8 +40,8 @@ class MazeGenerator:
     def solve(self):
         self.solution = solve_maze(self.maze, self.entry, self.exit)
 
-    def display(self):
-        display_maze(self.maze, self.height, self.width)
+    def display(self, show_solution = True, color_walls = 0, color_42 = 0):
+        display_maze(self.maze, self.height, self.width, show_solution, color_walls, color_42)
 
     def make_output_file(self):
         with open("output_maze.txt", "w") as file:

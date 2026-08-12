@@ -1,11 +1,12 @@
 from .grid import Grid
 
 
-def display_maze(maze: Grid, height: int, width: int):
-    wall = "██"
+def display_maze(maze: Grid, height: int, width: int, show_solution: bool = True, color_walls: int = 0, color_42: int = 0):
+    colors = [37, 36, 35, 34, 32, 31]
+    wall = f"\x1b[{colors[color_walls]}m██\x1b[0m"
     path = "  "
     solution = "\x1b[31m◀▶\x1b[0m"
-    forty_two = "\x1b[34m██\x1b[0m"
+    forty_two = f"\x1b[{colors[color_42]}m██\x1b[0m"
     entry = "🟢"
     exit = "🏁"
 
@@ -21,7 +22,7 @@ def display_maze(maze: Grid, height: int, width: int):
                 print(entry, end="")
             elif maze.get_cell(x, y).is_exit:
                 print(exit, end="")
-            elif maze.get_cell(x, y).is_solution:
+            elif show_solution and maze.get_cell(x, y).is_solution:
                 print(solution, end="")
             else:
                 print(path, end="")
