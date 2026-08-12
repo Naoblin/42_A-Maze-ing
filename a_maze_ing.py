@@ -1,5 +1,6 @@
 from mazegen import MazeGenerator
 from process_config import load_config
+from interactive_mode import display_interactive
 import sys
 from typing import Any
 
@@ -28,7 +29,7 @@ def main() -> None:
     maze.display()
     maze.make_output_file()
 
-    print(maze.solution)
+    display_interactive(maze)
 
 if __name__ == "__main__":
     main()
