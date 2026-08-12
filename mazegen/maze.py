@@ -37,14 +37,17 @@ class MazeGenerator:
                      color_walls, color_42)
 
     def make_output_file(self) -> None:
-        with open("output_maze.txt", "w") as file:
-            for x in range(self.height):
-                line: str = ""
-                for y in range(self.width):
-                    line += str(self.maze.get_cell(x, y).get_hexadec())
-                file.write(line + "\n")
+        try:
+            with open("output_maze.txt", "w") as file:
+                for x in range(self.height):
+                    line: str = ""
+                    for y in range(self.width):
+                        line += str(self.maze.get_cell(x, y).get_hexadec())
+                    file.write(line + "\n")
 
-            file.write("\n")
-            file.write(f"{self.entry[1]}, {self.entry[0]}\n")
-            file.write(f"{self.exit[1]}, {self.exit[0]}\n")
-            file.write(f"{self.solution}\n")
+                file.write("\n")
+                file.write(f"{self.entry[1]}, {self.entry[0]}\n")
+                file.write(f"{self.exit[1]}, {self.exit[0]}\n")
+                file.write(f"{self.solution}\n")
+        except OSError as e:
+            sys.exit(f"An error occured while writing to the output file: {str(e)}")
