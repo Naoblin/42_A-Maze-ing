@@ -1,11 +1,10 @@
-# v tomto souboru by byl kód pro generování bludiště
-# pripadne muzeme jeste misto generate.py udělat složku generate ve které budou všechny soubory s kódem
-# ke generování bludiště
 from .grid import Grid
 from random import seed, randrange, choice
 
+
 # zde bude kód pro vytvoření bludiště z grid (tj. bludiště se všemi stěnami)
-def generate_maze(height: int, width: int, perfect: bool, seed_value: int = None):
+def generate_maze(height: int, width: int, perfect: bool,
+                  seed_value: int | None = None) -> "Grid":
     maze = Grid(width, height)
     if seed_value:
         seed(seed_value)
@@ -13,10 +12,7 @@ def generate_maze(height: int, width: int, perfect: bool, seed_value: int = None
 
     # nahodne zvolit zacatek generovani bludiste
     current_cell: tuple[int, int] = (randrange(height), randrange(width))
-    # obcas se stalo, ze chybela stena u 42. To nastalo, když se začýtek generování
-    # bludiště vybral právě do 42 a při generování bludiště došlo k probourání stěny
-    # teď už by to mělo být ok, protože vybíráme start generování tak dlouho, dokud není
-    # mimo 42
+
     while maze.get_cell(*current_cell).is_forty_two:
         current_cell = (randrange(height), randrange(width))
     maze.get_cell(*current_cell).visit()
@@ -66,12 +62,13 @@ def generate_maze(height: int, width: int, perfect: bool, seed_value: int = None
     #         maze.get_cell(i, j).remove_wall("S")
     #         maze.get_cell(i + 1, j).remove_wall("N")
 
-    # otestovani metody check_3x3_and_remove_wall(), ze spravne vrati False, kdyz by se zadanz bod mel vyskytnout v prostoru 3x3
-    # print(f"check: {maze.check_3x3_and_remove_wall(0, 0, 'E')}")  # toto melo vypsat False, ale vypsalo True. Proc?
+    # otestovani metody check_3x3_and_remove_wall(), ze spravne vrati False,
+    # kdyz by se zadany bod mel vyskytnout v prostoru 3x3
+    # print(f"check: {maze.check_3x3_and_remove_wall(0, 0, 'E')}")
 
     # for i in range(height - 1):
-    #         for j in range(width - 1):
-    #             print(f"({i}, {j}): {maze.check_3x3_and_remove_wall(i, j, 'E')}")
+    #     for j in range(width - 1):
+    #         print(f"({i}, {j}): {maze.check_3x3_and_remove_wall(i, j, 'E')}")
 
     # TEST: tohle vráti z celého maze True pouze pro (1, 1), což je dobře
     # for i in range(height):
@@ -84,22 +81,20 @@ def generate_maze(height: int, width: int, perfect: bool, seed_value: int = None
     return maze
 
 
-def make_playable(maze: Grid):
+def make_playable(maze: Grid) -> None:
     for x in range(maze.height):
         for y in range(maze.width):
-            if maze.get_cell(x, y).is_dead_end() and not maze.get_cell(x, y).is_forty_two:
-                # vybrat nahodnou postavenou stenu ze seznamu sten
+            if (
+                maze.get_cell(x, y).is_dead_end() and
+                not maze.get_cell(x, y).is_forty_two
+            ):
                 walls: list[str] = maze.get_cell(x, y).get_walls()
                 while walls:
                     direction: str = walls.pop(randrange(len(walls)))
-                    # zkontrolovat, že to není stěna s okrajem, nebo s 42, jinak vybrat jinou
                     neighbour = maze.get_neighbour(x, y, direction)
-                    if maze.is_in_range(*neighbour) and not maze.get_cell(*neighbour).is_forty_two:
-                        # TO DO: zkontrolovat, že po odstranění stěny nevznikne prostor 3x3 a větší
-                        # odstranit danou stěnu (pokud nějaká zbyla)
+                    if (
+                        maze.is_in_range(*neighbour) and
+                        not maze.get_cell(*neighbour).is_forty_two
+                    ):
                         maze.check_3x3_and_remove_wall(x, y, direction)
-                        # maze.get_cell(x, y).remove_wall(direction)
-                        # maze.get_cell(*neighbour).remove_wall(direction, opposite=True)
                         break
-
-

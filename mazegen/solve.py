@@ -1,10 +1,8 @@
-# v tomto souboru by byl kód pro hledání řešení
-# pripadne muzeme jeste misto solve.py udělat složku solve
-# ve které budou všechny soubory s kódem k hledání řešení
 from .grid import Grid
 
 
-def solve_maze(maze: Grid, entry: tuple[int, int], exit: tuple[int, int]) -> str:
+def solve_maze(maze: Grid, entry: tuple[int, int], exit: tuple[int, int]
+               ) -> str:
     # tělo funkce jsem vyplnil jen pro představu, nechávám na tobě :)
     # solution: str = "ESEENNWNEES"
     # return solution
@@ -30,7 +28,8 @@ def solve_maze(maze: Grid, entry: tuple[int, int], exit: tuple[int, int]) -> str
             solution += maze.get_cell(*exit).path_direction
             break
 
-        for neighbour, direction in maze.get_opened_neighbours(*current_cell).items():
+        for neighbour, direction in maze.get_opened_neighbours(*current_cell
+                                                               ).items():
             if not maze.get_cell(*neighbour).is_visited:
                 queue.append(neighbour)
                 maze.get_cell(*neighbour).visit()

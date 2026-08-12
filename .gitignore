@@ -1,3 +1,6 @@
 .DS_Store
 .mypy_cache
 __pycache__
+maze_analyzer.py
+output_maze.txt
+config.txt
