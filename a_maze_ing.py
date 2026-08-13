@@ -6,9 +6,22 @@ from typing import Any
 
 
 def main() -> None:
-    # dopsat asi dodatečné kontroly, že je
-    # správný počet parametrů při zavolání funkce
-    # že soubor existuje atd. - to asi zkontrolovat v processing_config() jeste
+    """
+    Execute the main application flow.
+
+    This function serves as the entry point of the script. It parses
+    command-line arguments, loads the configuration file, instantiates 
+    the MazeGenerator, and starts the interactive display mode.
+
+    Raises
+    ------
+    SystemExit
+        If the number of provided command-line arguments is not exactly one.
+    """
+    if len(sys.argv) > 2:
+        sys.exit("One argument is expected. More than one were provided.")
+    elif len(sys.argv) < 2:
+        sys.exit("One argument is expected. None was provided.")
 
     param: dict[str, Any] = load_config(sys.argv[1])
 
@@ -20,19 +33,6 @@ def main() -> None:
         maze = MazeGenerator(width=param["WIDTH"], height=param["HEIGHT"],
                              entry=param["ENTRY"], exit=param["EXIT"],
                              perfect=param["PERFECT"])
-
-    # # pro generování bludiště zavoláme
-    # maze.generate()
-    # maze.display()
-
-    # # pro hledání řešení bludiště zavoláme
-    # print()
-    # maze.solve()
-    # maze.display()
-    # maze.make_output_file()
-
-    # vse vyse jsem zakomentoval, protoze je ted vsechno presunute do
-    # funkce display_interactive(maze)
 
     display_interactive(maze)
 

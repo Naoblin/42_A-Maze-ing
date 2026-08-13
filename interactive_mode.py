@@ -3,6 +3,18 @@ import os
 
 
 def display_interactive(maze: MazeGenerator) -> None:
+    """
+    Run the interactive terminal interface for the maze.
+
+    Generates, solves, and saves the maze, then enters a loop allowing 
+    the user to regenerate the maze, toggle the solution visibility, 
+    change the colors of walls and the '42' pattern, or exit.
+
+    Parameters
+    ----------
+    maze : MazeGenerator
+        The maze generator instance to be displayed and manipulated.
+    """
     maze.generate()
     maze.solve()
     maze.make_output_file()

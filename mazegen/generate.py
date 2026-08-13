@@ -2,15 +2,34 @@ from .grid import Grid
 from random import seed, randrange, choice
 
 
-# zde bude kód pro vytvoření bludiště z grid (tj. bludiště se všemi stěnami)
 def generate_maze(height: int, width: int, perfect: bool,
                   seed_value: int | None = None) -> "Grid":
+    """
+    Generate a random maze structure on a new grid using
+    the recursive backtracker algorithm.
+
+    Parameters
+    ----------
+    height : int
+        The height (number of rows) of the maze.
+    width : int
+        The width (number of columns) of the maze.
+    perfect : bool
+        If True, generates a perfect maze without loops. If False, 
+        extra walls at dead-ends are removed to create a playable board.
+    seed_value : int | None, optional
+        The seed for the random number generator. Default is None.
+
+    Returns
+    -------
+    Grid
+        A new Grid instance representing the fully generated maze.
+    """
     maze = Grid(width, height)
     if seed_value:
         seed(seed_value)
     visited_cells: list[tuple[int, int]] = []
 
-    # nahodne zvolit zacatek generovani bludiste
     current_cell: tuple[int, int] = (randrange(height), randrange(width))
 
     while maze.get_cell(*current_cell).is_forty_two:
@@ -49,32 +68,6 @@ def generate_maze(height: int, width: int, perfect: bool,
             visited_cells.append((x, y))
             maze.get_cell(x, y).visit()
 
-    # TESTOVACÍ KÓD
-
-    # dva for cykly pro vytvoreni prazdneho bloku 3x3 v maze
-    # for i in range(3):
-    #     for j in range(2):
-    #         maze.get_cell(i, j).remove_wall("E")
-    #         maze.get_cell(i, j + 1).remove_wall("W")
-
-    # for j in range(3):
-    #     for i in range(2):
-    #         maze.get_cell(i, j).remove_wall("S")
-    #         maze.get_cell(i + 1, j).remove_wall("N")
-
-    # otestovani metody check_3x3_and_remove_wall(), ze spravne vrati False,
-    # kdyz by se zadany bod mel vyskytnout v prostoru 3x3
-    # print(f"check: {maze.check_3x3_and_remove_wall(0, 0, 'E')}")
-
-    # for i in range(height - 1):
-    #     for j in range(width - 1):
-    #         print(f"({i}, {j}): {maze.check_3x3_and_remove_wall(i, j, 'E')}")
-
-    # TEST: tohle vráti z celého maze True pouze pro (1, 1), což je dobře
-    # for i in range(height):
-    #     for j in range(width):
-    #         print(f"({i}, {j}): {maze.is_3x3(i, j)}")
-
     if not perfect:
         make_playable(maze)
 
@@ -82,6 +75,18 @@ def generate_maze(height: int, width: int, perfect: bool,
 
 
 def make_playable(maze: Grid) -> None:
+    """
+    Remove dead ends to make the maze suitable for Pac-Man.
+
+    Iterates through the maze and randomly removes walls from dead ends 
+    to create loops, ensuring no 3x3 open spaces are formed and the 
+    '42' pattern remains intact.
+
+    Parameters
+    ----------
+    maze : Grid
+        The grid object representing the maze to be modified.
+    """
     for x in range(maze.height):
         for y in range(maze.width):
             if (
