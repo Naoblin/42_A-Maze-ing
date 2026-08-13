@@ -96,7 +96,7 @@ class MazeGenerator:
         self.solution = solve_maze(self.maze, self.entry, self.exit)
 
     def display(self, show_solution: bool = True, color_walls: int = 0,
-                color_42: int = 0) -> None:
+                color_42: int = 1) -> None:
         """
         Print a visual representation of the maze to the standard output.
 
@@ -105,10 +105,14 @@ class MazeGenerator:
         show_solution : bool, optional
             Whether to display the solved path in the output. Default is True.
         color_walls : int, optional
-            The ANSI color code to use for the walls. Default is 0.
+            ANSI color code (0-6) to use for the walls. Default is 0 (white).
+            0 = white, 1 = cyan, 2 = magenta, 3 = blue, 4 = yellow,
+            5 = green, 6 = red.
         color_42 : int, optional
-            The ANSI color code to use for the mandatory '42' pattern. 
-            Default is 0.
+            ANSI color code (0-6) to use for the mandatory '42' pattern.
+            Default is 1 (cyan).
+            0 = white, 1 = cyan, 2 = magenta, 3 = blue, 4 = yellow,
+            5 = green, 6 = red.
         """
         display_maze(self.maze, self.height, self.width, show_solution,
                      color_walls, color_42)

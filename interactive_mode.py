@@ -44,12 +44,12 @@ def display_interactive(maze: MazeGenerator) -> None:
         elif decision == "2":
             show_solution = not show_solution
         elif decision == "3":
-            color_walls = (color_walls + 1) % 6
+            color_walls = (color_walls + 1) % 7
             if color_walls == color_42:
-                color_walls = (color_walls + 1) % 6
+                color_walls = (color_walls + 1) % 7
         elif decision == "4":
-            color_42 = (color_42 + 1) % 6
+            color_42 = (color_42 + 1) % 7
             if color_42 == color_walls:
-                color_42 = (color_42 + 1) % 6
+                color_42 = (color_42 + 1) % 7
         elif decision == "5":
             break
