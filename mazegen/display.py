@@ -9,6 +9,12 @@ def display_maze(maze: Grid, height: int, width: int,
 
     Parameters
     ----------
+    maze : Grid
+        The grid object containing the maze data.
+    height : int
+        The height (number of rows) of the maze.
+    width : int
+        The width (number of columns) of the maze.
     show_solution : bool, optional
         Whether to display the solved path in the output. Default is True.
     color_walls : int, optional

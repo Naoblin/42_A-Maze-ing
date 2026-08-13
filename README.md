@@ -44,9 +44,10 @@ SEED=gdgsagdrgd
 Each line is parsed into a `KEY=VALUE` pair, validated, and converted to the correct type (integers, coordinate tuples, booleans). The program checks for missing mandatory keys, invalid values, and valid `ENTRY`/`EXIT` coordinates, exiting with an error message if the config file is invalid.
 
 ### `MazeGenerator` Class
-- Class structure and key methods
+`MazeGenerator` is the main interface for working with mazes. It takes the maze dimensions, entry/exit points, and optional settings (`perfect`, `seed`) on initialization, then exposes four core methods: `generate()` to build the maze, `solve()` to find the shortest path, `display()` to print it, and `make_output_file()` to export the hex layout and solution to a file.
 
 ### Maze Generation Algorithm
+TODO: Lukas
 - The algorithm you chose
 - Why you chose it
 - (Optional) Advanced features — multiple algorithms, alternate generation modes
@@ -72,6 +73,7 @@ TODO: Lukas
 # Resources
 - [Jamis Buck: "Algorithm" is Not a Four-Letter Word](https://www.jamisbuck.org/presentations/rubyconf2011/index.html) - RubyConf 2011 talk (Jamis Buck) with interactive demos of major maze-generation algorithms
 - [Red Blob Games: Introduction to the A* Algorithm](https://www.redblobgames.com/pathfinding/a-star/introduction.html) - interactive introduction to A and related graph search algorithms, with hands-on animated visualizations
+- [Python Docstrings - GeeksforGeeks](https://www.geeksforgeeks.org/python/python-docstrings/) - reference on writing and formatting Python docstrings, including different documentation styles (Google, Numpydoc)
 - [Claude AI](https://claude.ai/) - AI assistant for debugging, understanding concepts and drafting docs
 
 TODO: do not forget things from the list below!!!!!
