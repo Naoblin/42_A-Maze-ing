@@ -3,7 +3,7 @@ from .grid import Grid
 
 def display_maze(maze: Grid, height: int, width: int,
                  show_solution: bool = True, color_walls: int = 0,
-                 color_42: int = 0) -> None:
+                 color_42: int = 1) -> None:
     """
     Print a visual representation of the maze to the standard output.
 
@@ -18,11 +18,16 @@ def display_maze(maze: Grid, height: int, width: int,
     show_solution : bool, optional
         Whether to display the solved path in the output. Default is True.
     color_walls : int, optional
-        The ANSI color index (0-5) to use for the walls. Default is 0.
+        ANSI color code (0-6) to use for the walls. Default is 0 (white).
+        0 = white, 1 = cyan, 2 = magenta, 3 = blue, 4 = yellow,
+        5 = green, 6 = red.
     color_42 : int, optional
-        The ANSI color index (0-5) to use for the '42' pattern. Default is 0.
+        ANSI color code (0-6) to use for the mandatory '42' pattern.
+        Default is 1 (cyan).
+        0 = white, 1 = cyan, 2 = magenta, 3 = blue, 4 = yellow,
+        5 = green, 6 = red.
     """
-    colors = [37, 36, 35, 34, 32, 31]
+    colors = [37, 36, 35, 34, 33, 32, 31]
     wall = f"\x1b[{colors[color_walls]}m██\x1b[0m"
     path = "  "
     solution = "\x1b[31m◀▶\x1b[0m"
