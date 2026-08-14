@@ -53,10 +53,12 @@ TODO: Lukas
 - (Optional) Advanced features — multiple algorithms, alternate generation modes
 
 ### Maze Solving Algorithm
-
+After researching various solving algorithms, we decided to go with Breadth-First Search (BFS). It's relatively simple to implement and it guarantees the shortest path between the entry and exit. Starting from the entry cell, the algorithm explores all reachable neighbours level by level, keeping track of how each cell was reached until it finds the exit. Once the exit is found, the path is reconstructed backwards to the entry and returned as a string of directions (e.g. `NESW`). If no path exists, an error is raised.
 
 ### Interactive Display Interface
-- (Optional) Advanced display options, if you support more than one
+Entering interactive mode generates the maze, solves it, and saves it to the output file, then drops into a terminal menu where the maze is redrawn after every action. From there, you can regenerate a new maze, toggle the solution path on or off, and cycle through wall and '42' pattern colors. Choosing exit ends the session.
+
+Note that this interactive loop is specific to the CLI program and is not part of the reusable module. Only the underlying `display()` method is exposed for reuse elsewhere.
 
 ### Reusability
 - What part of the code is reusable, and how (this is where the "Python module" point from earlier lives)
