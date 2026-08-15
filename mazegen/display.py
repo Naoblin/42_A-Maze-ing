@@ -27,6 +27,15 @@ def display_maze(maze: Grid, height: int, width: int,
         0 = white, 1 = cyan, 2 = magenta, 3 = blue, 4 = yellow,
         5 = green, 6 = red.
     """
+    if (
+        not isinstance(color_42, int) or
+        not isinstance(color_walls, int) or
+        not (0 <= color_42 <= 6) or
+        not (0 <= color_walls <= 6)
+    ):
+        raise ValueError("The color parameters must be integers "
+                         "between 0 and 6!")
+
     colors = [37, 36, 35, 34, 33, 32, 31]
     wall = f"\x1b[{colors[color_walls]}m██\x1b[0m"
     path = "  "
