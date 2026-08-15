@@ -10,8 +10,8 @@ def load_config(config_file: str) -> dict[str, Any]:
     """
     Load and parse the maze configuration from a file.
 
-    Reads the specified file line by line, extracts key-value pairs, 
-    and validates them. It also performs mandatory key checks and 
+    Reads the specified file line by line, extracts key-value pairs,
+    and validates them. It also performs mandatory key checks and
     coordinate boundary validation.
 
     Parameters
@@ -80,7 +80,7 @@ def check_entry_exit(config: dict[str, Any]) -> None:
     """
     Validate the entry and exit coordinates.
 
-    Ensures that the entry and exit points are not identical and 
+    Ensures that the entry and exit points are not identical and
     that their coordinates fall within the defined maze dimensions.
 
     Parameters
@@ -111,8 +111,8 @@ def check_key_value(key_value_pair: str) -> tuple[str, Any]:
     """
     Parse and validate a single configuration line.
 
-    Splits a 'KEY=VALUE' string, checks if the key is allowed, and 
-    converts the value to its appropriate data type (integer, tuple, 
+    Splits a 'KEY=VALUE' string, checks if the key is allowed, and
+    converts the value to its appropriate data type (integer, tuple,
     or boolean).
 
     Parameters
@@ -128,7 +128,7 @@ def check_key_value(key_value_pair: str) -> tuple[str, Any]:
     Raises
     ------
     ValueError
-        If the format is incorrect, the key is unknown, or the value 
+        If the format is incorrect, the key is unknown, or the value
         is invalid for the given key.
     """
     separ_pair: list[str] = key_value_pair.split("=")
