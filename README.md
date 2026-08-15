@@ -55,6 +55,34 @@ TODO: Lukas
 ### Maze Solving Algorithm
 After researching various solving algorithms, we decided to go with Breadth-First Search (BFS). It's relatively simple to implement and it guarantees the shortest path between the entry and exit. Starting from the entry cell, the algorithm explores all reachable neighbours level by level, keeping track of how each cell was reached until it finds the exit. Once the exit is found, the path is reconstructed backwards to the entry and returned as a string of directions (e.g. `NESW`). If no path exists, an error is raised.
 
+### Output File
+
+Once a maze is generated and solved, it can be exported using `make_output_file()`. The file contains three parts, separated by blank lines:
+
+1. **The maze layout** — one line per row, where each character is a hexadecimal digit (0-F) encoding the walls standing around that cell.
+2. **The entry and exit coordinates** — one `x, y` pair per line.
+3. **The solution path** — a string of directions (`N`, `E`, `S`, `W`) from entry to exit.
+
+Each hex digit is a sum of bit values for the walls present on that cell: `N = 1`, `E = 2`, `S = 4`, `W = 8`. For example, a cell with only the North and West walls standing would be `1 + 8 = 9`.
+
+**Example:**
+
+```
+95139553953
+83C2C154696
+AAFA96FFFC3
+AAFC4157F92
+86FFFAFFFAA
+C393FAFD52A
+946AFAFFFAA
+853C50393C2
+C54556C6C56
+
+0, 0
+10, 8
+EEESSSEESSSSESENESEE
+```
+
 ### Interactive Display Interface
 Entering interactive mode generates the maze, solves it, and saves it to the output file, then drops into a terminal menu where the maze is redrawn after every action. From there, you can regenerate a new maze, toggle the solution path on or off, and cycle through wall and '42' pattern colors. Choosing exit ends the session.
 
@@ -75,6 +103,8 @@ maze.make_output_file()
 ```
 
 Only the interactive menu loop (`display_interactive`) and config validation are specific to the standalone program and are not part of the reusable module.
+
+> The `mazegen` package, along with its license, is distributed as a standalone `.whl`/`.tar.gz` file at the root of this repository. See [`LICENSE.md`](./LICENSE.md) for reuse terms.
 
 ## Team & Project Management
 - Roles of each team member
