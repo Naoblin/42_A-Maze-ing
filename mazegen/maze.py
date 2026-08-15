@@ -61,7 +61,7 @@ class MazeGenerator:
         self.perfect = perfect
         self.seed = seed
         self.maze: Grid
-        self.solution: str
+        self.solution: str | None = None
 
     def generate(self) -> None:
         """
@@ -93,7 +93,10 @@ class MazeGenerator:
         representing the sequence of directions required to navigate 
         the maze.
         """
-        self.solution = solve_maze(self.maze, self.entry, self.exit)
+        try:
+            self.solution = solve_maze(self.maze, self.entry, self.exit)
+        except AttributeError as e:
+            sys.exit(f"AttributeError: {e}")
 
     def display(self, show_solution: bool = True, color_walls: int = 0,
                 color_42: int = 1) -> None:
@@ -114,8 +117,16 @@ class MazeGenerator:
             0 = white, 1 = cyan, 2 = magenta, 3 = blue, 4 = yellow,
             5 = green, 6 = red.
         """
-        display_maze(self.maze, self.height, self.width, show_solution,
+        if show_solution and not self.solution:
+            print("No solution found yet. Displaying the maze without a path.",
+                  "Run solve() first to include the solution.")
+        try:
+            display_maze(self.maze, self.height, self.width, show_solution,
                      color_walls, color_42)
+        except ValueError as e:
+            print(f"Display maze error: {e}")
+        except AttributeError as e:
+            sys.exit(f"AttributeError: {e}")
 
     def make_output_file(self) -> None:
         """
@@ -145,3 +156,8 @@ class MazeGenerator:
                 file.write(f"{self.solution}\n")
         except OSError as e:
             sys.exit(f"An error occured while writing to the output file: {str(e)}")
+        except AttributeError as e:
+            sys.exit(f"AttributeError: {e}")
+        if not self.solution:
+            print("No solution found yet. The 'output_maze.txt' shows 'None'",
+                  "instead. Run solve() first to include the solution.")
