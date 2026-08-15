@@ -61,7 +61,20 @@ Entering interactive mode generates the maze, solves it, and saves it to the out
 Note that this interactive loop is specific to the CLI program and is not part of the reusable module. Only the underlying `display()` method is exposed for reuse elsewhere.
 
 ### Reusability
-- What part of the code is reusable, and how (this is where the "Python module" point from earlier lives)
+
+The core maze logic (generation, solving, and display) is implemented as a self-contained Python module (`mazegen`), independent of the config file parsing and the interactive CLI. This means it can be imported and used directly in other Python projects, without needing a config file or the terminal interface at all.
+
+```python
+from mazegen import MazeGenerator
+
+maze = MazeGenerator(width=20, height=15, entry=(0, 0), exit=(19, 14), perfect=True)
+maze.generate()
+maze.solve()
+maze.display()
+maze.make_output_file()
+```
+
+Only the interactive menu loop (`display_interactive`) and config validation are specific to the standalone program and are not part of the reusable module.
 
 ## Team & Project Management
 - Roles of each team member
