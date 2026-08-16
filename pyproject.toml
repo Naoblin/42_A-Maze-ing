@@ -11,3 +11,6 @@ authors = [
     { name="Lukáš Novotný", email="lnovotny@student.42prague.com" }
 ]
 dependencies = []
+
+[tool.setuptools]
+packages = ["mazegen"]
