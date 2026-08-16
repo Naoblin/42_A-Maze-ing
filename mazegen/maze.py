@@ -46,8 +46,8 @@ class MazeGenerator:
     """
 
     def __init__(self, width: int, height: int, entry: tuple[int, int],
-                 exit: tuple[int, int], perfect: bool = False, seed: Any = None
-                 ) -> None:
+                 exit: tuple[int, int], output_file: str,
+                 perfect: bool = False, seed: Any = None) -> None:
         """
         Initialize the MazeGenerator instance.
 
@@ -66,17 +66,18 @@ class MazeGenerator:
         gates: dict[str, tuple[int, int]] = {"entry": entry, "exit": exit}
         for gate in gates:
             x, y = gates[gate]
-            if not (0 <= y < height):
-                raise ValueError(f"The 'y' coordinate of {gate} ({y}) is out "
-                                 f"of range (0, {height - 1})")
             if not (0 <= x < width):
                 raise ValueError(f"The 'x' coordinate of {gate} ({x}) is out "
                                  f"of range (0, {width - 1})")
+            if not (0 <= y < height):
+                raise ValueError(f"The 'y' coordinate of {gate} ({y}) is out "
+                                 f"of range (0, {height - 1})")
 
         self.width = width
         self.height = height
         self.entry = entry[1], entry[0]
         self.exit = exit[1], exit[0]
+        self.output_file = output_file
         self.perfect = perfect
         self.seed = seed
         self.maze: Grid
@@ -162,7 +163,7 @@ class MazeGenerator:
         if not hasattr(self, "maze"):
             raise RuntimeError("Cannot write output file: The maze has not "
                                "been generated yet. Call generate() first.")
-        with open("output_maze.txt", "w") as file:
+        with open(self.output_file, "w") as file:
             for x in range(self.height):
                 line: str = ""
                 for y in range(self.width):
@@ -175,5 +176,5 @@ class MazeGenerator:
             file.write(f"{self.solution}\n")
 
         if not self.solution:
-            print("No solution found yet. The 'output_maze.txt' shows 'None'",
-                  "instead. Run solve() first to include the solution.")
+            print(f"No solution found yet. The '{self.output_file}' shows",
+                  "'None' instead. Run solve() first to include the solution.")
