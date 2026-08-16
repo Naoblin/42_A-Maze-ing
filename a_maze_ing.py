@@ -29,11 +29,14 @@ def main() -> None:
         if "SEED" in param:
             maze = MazeGenerator(width=param["WIDTH"], height=param["HEIGHT"],
                                  entry=param["ENTRY"], exit=param["EXIT"],
+                                 output_file=param["OUTPUT_FILE"],
                                  perfect=param["PERFECT"], seed=param["SEED"])
         else:
             maze = MazeGenerator(width=param["WIDTH"], height=param["HEIGHT"],
                                  entry=param["ENTRY"], exit=param["EXIT"],
+                                 output_file=param["OUTPUT_FILE"],
                                  perfect=param["PERFECT"])
+        display_interactive(maze)
     except ValueError as e:
         sys.exit(str(e))
     except RuntimeError as e:
@@ -41,8 +44,6 @@ def main() -> None:
     except OSError as e:
         sys.exit("An error occured while writing to the output file: "
                  f"{str(e)}")
-
-    display_interactive(maze)
 
 
 if __name__ == "__main__":
