@@ -3,12 +3,12 @@ from .solve import solve_maze
 from .grid import Grid
 from .display import display_maze
 from typing import Any
-import sys
 
 
 class MazeGenerator:
     """
-    A unified interface for generating, solving, displaying, and exporting mazes.
+    A unified interface for generating, solving, displaying, and exporting
+    mazes.
 
     Parameters
     ----------
@@ -41,7 +41,7 @@ class MazeGenerator:
     display()
         Prints a visual representation of the maze to the standard output.
     make_output_file()
-        Exports the hexadecimal maze layout, coordinates, and solution 
+        Exports the hexadecimal maze layout, coordinates, and solution
         into 'output_maze.txt'.
     """
 
@@ -54,6 +54,25 @@ class MazeGenerator:
         Coordinates for entry and exit are automatically converted from
         (x, y) input format to (row, column) internal layout.
         """
+        for size in (width, height):
+            if size < 2:
+                raise ValueError("The maze size (width/height) cannot be less "
+                                 "than 2")
+
+        if entry == exit:
+            raise ValueError("The 'ENTRY' and 'EXIT' coordinates "
+                             "cannot be the same!")
+
+        gates: dict[str, tuple[int, int]] = {"entry": entry, "exit": exit}
+        for gate in gates:
+            x, y = gates[gate]
+            if not (0 <= y < height):
+                raise ValueError(f"The 'y' coordinate of {gate} ({y}) is out "
+                                 f"of range (0, {height - 1})")
+            if not (0 <= x < width):
+                raise ValueError(f"The 'x' coordinate of {gate} ({x}) is out "
+                                 f"of range (0, {width - 1})")
+
         self.width = width
         self.height = height
         self.entry = entry[1], entry[0]
@@ -69,34 +88,31 @@ class MazeGenerator:
 
         This method populates the `maze` attribute by delegating the core
         logic to the `generate_maze` function. It then sets the specified
-        entry and exit cells. 
+        entry and exit cells.
 
         Raises
         ------
         SystemExit
-            If the entry or exit cannot be placed (e.g., they overlap 
+            If the entry or exit cannot be placed (e.g., they overlap
             with the forbidden '42' pattern), the program exits.
         """
         self.maze = generate_maze(self.height, self.width, self.perfect,
                                   self.seed)
-        try:
-            self.maze.get_cell(*self.entry).add_entry()
-            self.maze.get_cell(*self.exit).add_exit()
-        except ValueError as e:
-            sys.exit(str(e))
+        self.maze.get_cell(*self.entry).add_entry()
+        self.maze.get_cell(*self.exit).add_exit()
 
     def solve(self) -> None:
         """
         Find the shortest path from the entry to the exit.
 
         This method populates the `solution` attribute with a string
-        representing the sequence of directions required to navigate 
+        representing the sequence of directions required to navigate
         the maze.
         """
-        try:
-            self.solution = solve_maze(self.maze, self.entry, self.exit)
-        except AttributeError as e:
-            sys.exit(f"AttributeError: {e}")
+        if not hasattr(self, "maze"):
+            raise RuntimeError("Cannot solve: The maze has not been generated "
+                               "yet. Call generate() first.")
+        self.solution = solve_maze(self.maze, self.entry, self.exit)
 
     def display(self, show_solution: bool = True, color_walls: int = 0,
                 color_42: int = 1) -> None:
@@ -117,24 +133,25 @@ class MazeGenerator:
             0 = white, 1 = cyan, 2 = magenta, 3 = blue, 4 = yellow,
             5 = green, 6 = red.
         """
+        if not hasattr(self, "maze"):
+            raise RuntimeError("Cannot display: The maze has not been "
+                               "generated yet. Call generate() first.")
         if show_solution and not self.solution:
             print("No solution found yet. Displaying the maze without a path.",
                   "Run solve() first to include the solution.")
         try:
             display_maze(self.maze, self.height, self.width, show_solution,
-                     color_walls, color_42)
+                         color_walls, color_42)
         except ValueError as e:
             print(f"Display maze error: {e}")
-        except AttributeError as e:
-            sys.exit(f"AttributeError: {e}")
 
     def make_output_file(self) -> None:
         """
         Export the maze layout and metadata to a text file.
 
         The file is created as 'output_maze.txt' in the current working
-        directory. It contains the hexadecimal representation of the walls 
-        for each cell, followed by the entry coordinates, exit coordinates, 
+        directory. It contains the hexadecimal representation of the walls
+        for each cell, followed by the entry coordinates, exit coordinates,
         and the solution path string.
 
         Raises
@@ -142,22 +159,21 @@ class MazeGenerator:
         SystemExit
             If an OSError occurs during the file writing process.
         """
-        try:
-            with open("output_maze.txt", "w") as file:
-                for x in range(self.height):
-                    line: str = ""
-                    for y in range(self.width):
-                        line += str(self.maze.get_cell(x, y).get_hexadec())
-                    file.write(line + "\n")
+        if not hasattr(self, "maze"):
+            raise RuntimeError("Cannot write output file: The maze has not "
+                               "been generated yet. Call generate() first.")
+        with open("output_maze.txt", "w") as file:
+            for x in range(self.height):
+                line: str = ""
+                for y in range(self.width):
+                    line += str(self.maze.get_cell(x, y).get_hexadec())
+                file.write(line + "\n")
 
-                file.write("\n")
-                file.write(f"{self.entry[1]}, {self.entry[0]}\n")
-                file.write(f"{self.exit[1]}, {self.exit[0]}\n")
-                file.write(f"{self.solution}\n")
-        except OSError as e:
-            sys.exit(f"An error occured while writing to the output file: {str(e)}")
-        except AttributeError as e:
-            sys.exit(f"AttributeError: {e}")
+            file.write("\n")
+            file.write(f"{self.entry[1]}, {self.entry[0]}\n")
+            file.write(f"{self.exit[1]}, {self.exit[0]}\n")
+            file.write(f"{self.solution}\n")
+
         if not self.solution:
             print("No solution found yet. The 'output_maze.txt' shows 'None'",
                   "instead. Run solve() first to include the solution.")

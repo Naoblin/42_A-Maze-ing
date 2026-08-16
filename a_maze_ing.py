@@ -10,7 +10,7 @@ def main() -> None:
     Execute the main application flow.
 
     This function serves as the entry point of the script. It parses
-    command-line arguments, loads the configuration file, instantiates 
+    command-line arguments, loads the configuration file, instantiates
     the MazeGenerator, and starts the interactive display mode.
 
     Raises
@@ -25,14 +25,22 @@ def main() -> None:
 
     param: dict[str, Any] = load_config(sys.argv[1])
 
-    if "SEED" in param:
-        maze = MazeGenerator(width=param["WIDTH"], height=param["HEIGHT"],
-                             entry=param["ENTRY"], exit=param["EXIT"],
-                             perfect=param["PERFECT"], seed=param["SEED"])
-    else:
-        maze = MazeGenerator(width=param["WIDTH"], height=param["HEIGHT"],
-                             entry=param["ENTRY"], exit=param["EXIT"],
-                             perfect=param["PERFECT"])
+    try:
+        if "SEED" in param:
+            maze = MazeGenerator(width=param["WIDTH"], height=param["HEIGHT"],
+                                 entry=param["ENTRY"], exit=param["EXIT"],
+                                 perfect=param["PERFECT"], seed=param["SEED"])
+        else:
+            maze = MazeGenerator(width=param["WIDTH"], height=param["HEIGHT"],
+                                 entry=param["ENTRY"], exit=param["EXIT"],
+                                 perfect=param["PERFECT"])
+    except ValueError as e:
+        sys.exit(str(e))
+    except RuntimeError as e:
+        sys.exit(str(e))
+    except OSError as e:
+        sys.exit("An error occured while writing to the output file: "
+                 f"{str(e)}")
 
     display_interactive(maze)
 
