@@ -15,6 +15,8 @@ def display_interactive(maze: MazeGenerator) -> None:
     maze : MazeGenerator
         The maze generator instance to be displayed and manipulated.
     """
+    os.system('cls' if os.name == 'nt' else 'clear')
+
     maze.generate()
     maze.solve()
     maze.make_output_file()
