@@ -146,7 +146,7 @@ Our primary tool was GitHub, which we used to keep our shared codebase in sync d
 ### What worked well and what could be improved
 
  - **What worked well:** Communication and teamwork went smoothly throughout the entire project, allowing us to align on tasks and solve problems efficiently.
- - **What could be improved:** Next time, we would improve our Git workflow. Instead of using a single long-lived personal branch for the entire project, adopting dedicated feature branches for individual tasks would provide better isolation and a cleaner commit history.
+ - **What could be improved:** Next time, we would improve our Git workflow. Instead of using a single long-lived personal branch for the entire project, adopting dedicated feature branches for individual tasks would provide better isolation and a cleaner commit history. Additionally, we would implement unit tests from the beginning of development to avoid repetitive manual testing after every major change.
 
 # Instructions
 
