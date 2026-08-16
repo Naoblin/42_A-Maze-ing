@@ -22,7 +22,6 @@ def display_interactive(maze: MazeGenerator) -> None:
     color_walls: int = 0
     color_42: int = 1
     while True:
-        os.system("clear")
         maze.display(show_solution, color_walls, color_42)
         menu = ("\n" +
                 "=== A-Maze-Ing ===\n" +
@@ -36,6 +35,8 @@ def display_interactive(maze: MazeGenerator) -> None:
 
         while decision not in ("1", "2", "3", "4", "5"):
             decision = input("Not a valid option, try again: ")
+
+        os.system('cls' if os.name == 'nt' else 'clear')
 
         if decision == "1":
             maze.generate()
