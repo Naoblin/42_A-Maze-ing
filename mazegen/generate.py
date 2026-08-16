@@ -15,7 +15,7 @@ def generate_maze(height: int, width: int, perfect: bool,
     width : int
         The width (number of columns) of the maze.
     perfect : bool
-        If True, generates a perfect maze without loops. If False, 
+        If True, generates a perfect maze without loops. If False,
         extra walls at dead-ends are removed to create a playable board.
     seed_value : int | None, optional
         The seed for the random number generator. Default is None.
@@ -78,8 +78,8 @@ def make_playable(maze: Grid) -> None:
     """
     Remove dead ends to make the maze suitable for Pac-Man.
 
-    Iterates through the maze and randomly removes walls from dead ends 
-    to create loops, ensuring no 3x3 open spaces are formed and the 
+    Iterates through the maze and randomly removes walls from dead ends
+    to create loops, ensuring no 3x3 open spaces are formed and the
     '42' pattern remains intact.
 
     Parameters

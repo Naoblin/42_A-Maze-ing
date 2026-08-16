@@ -10,8 +10,8 @@ def load_config(config_file: str) -> dict[str, Any]:
     """
     Load and parse the maze configuration from a file.
 
-    Reads the specified file line by line, extracts key-value pairs, 
-    and validates them. It also performs mandatory key checks and 
+    Reads the specified file line by line, extracts key-value pairs,
+    and validates them. It also performs mandatory key checks and
     coordinate boundary validation.
 
     Parameters
@@ -48,7 +48,6 @@ def load_config(config_file: str) -> dict[str, Any]:
 
     try:
         check_mandatory(config_dict, config_file)
-        check_entry_exit(config_dict)
     except ValueError as e:
         sys.exit(str(e))
 
@@ -76,43 +75,12 @@ def check_mandatory(config: dict[str, Any], config_file: str) -> None:
                              f"in '{config_file}'.")
 
 
-def check_entry_exit(config: dict[str, Any]) -> None:
-    """
-    Validate the entry and exit coordinates.
-
-    Ensures that the entry and exit points are not identical and 
-    that their coordinates fall within the defined maze dimensions.
-
-    Parameters
-    ----------
-    config : dict[str, Any]
-        The dictionary containing 'ENTRY', 'EXIT', 'WIDTH', and 'HEIGHT'.
-
-    Raises
-    ------
-    ValueError
-        If the entry and exit are the same, or if they are out of bounds.
-    """
-    if config["ENTRY"] == config["EXIT"]:
-        raise ValueError("The 'ENTRY' and 'EXIT' coordinates "
-                         "cannot be the same!")
-
-    for gate in ["ENTRY", "EXIT"]:
-        x, y = config[gate]
-        if not (0 <= y < config["HEIGHT"]):
-            raise ValueError(f"The 'y' coordinate of {gate} ({y}) is out of "
-                             f"range (0, {config['HEIGHT'] - 1})")
-        if not (0 <= x < config["WIDTH"]):
-            raise ValueError(f"The 'x' coordinate of {gate} ({x}) is out of "
-                             f"range (0, {config['WIDTH'] - 1})")
-
-
 def check_key_value(key_value_pair: str) -> tuple[str, Any]:
     """
     Parse and validate a single configuration line.
 
-    Splits a 'KEY=VALUE' string, checks if the key is allowed, and 
-    converts the value to its appropriate data type (integer, tuple, 
+    Splits a 'KEY=VALUE' string, checks if the key is allowed, and
+    converts the value to its appropriate data type (integer, tuple,
     or boolean).
 
     Parameters
@@ -128,7 +96,7 @@ def check_key_value(key_value_pair: str) -> tuple[str, Any]:
     Raises
     ------
     ValueError
-        If the format is incorrect, the key is unknown, or the value 
+        If the format is incorrect, the key is unknown, or the value
         is invalid for the given key.
     """
     separ_pair: list[str] = key_value_pair.split("=")
@@ -147,8 +115,6 @@ def check_key_value(key_value_pair: str) -> tuple[str, Any]:
 
     if key == "WIDTH" or key == "HEIGHT":
         value = int(value)
-        if value < MIN_SIZE_LIMIT:
-            raise ValueError(f"{key} cannot be less than {MIN_SIZE_LIMIT}")
 
     elif key == "ENTRY" or key == "EXIT":
         if len(value.split(",")) != 2:
@@ -164,8 +130,8 @@ def check_key_value(key_value_pair: str) -> tuple[str, Any]:
         elif value == "False":
             value = False
         else:
-            raise ValueError(f"Value {value} is not allowed for key {key}. "
-                             "Allowed values are 'True' od 'False'")
+            raise ValueError(f"Value '{value}' is not allowed for key {key}. "
+                             "Allowed values are 'True' or 'False'")
 
     return key, value
 

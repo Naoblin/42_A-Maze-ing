@@ -5,7 +5,7 @@ def solve_maze(maze: Grid, entry: tuple[int, int], exit: tuple[int, int]
                ) -> str:
     """Find the shortest path from the entry to the exit.
 
-    Uses Breadth-First Search (BFS) to traverse the maze and records 
+    Uses Breadth-First Search (BFS) to traverse the maze and records
     the path directions. Resets visited statuses on the grid before running.
 
     Parameters
@@ -20,7 +20,7 @@ def solve_maze(maze: Grid, entry: tuple[int, int], exit: tuple[int, int]
     Returns
     -------
     str
-        A string representing the sequence of directions (e.g., 'NESW') 
+        A string representing the sequence of directions (e.g., 'NESW')
         to navigate from the entry to the exit.
 
     Raises

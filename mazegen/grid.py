@@ -155,10 +155,11 @@ class Cell:
         direction : str
             The direction of the wall to modify ('N', 'E', 'S', 'W').
         opposite : bool, optional
-            If True, modifies the wall on the opposite side of the given direction.
-            Default is False.
+            If True, modifies the wall on the opposite side of the given
+            direction. Default is False.
         inverse : bool, optional
-            If True, restores the wall instead of removing it. Default is False.
+            If True, restores the wall instead of removing it. Default is
+            False.
 
         Raises
         ------
@@ -261,7 +262,8 @@ class Grid:
         Returns
         -------
         bool
-            True if the coordinates are within the grid limits, False otherwise.
+            True if the coordinates are within the grid limits, False
+            otherwise.
         """
         return 0 <= y < self.width and 0 <= x < self.height
 
@@ -326,7 +328,7 @@ class Grid:
         Returns
         -------
         dict[tuple[int, int], str]
-            A dictionary mapping the (row, col) coordinates of accessible 
+            A dictionary mapping the (row, col) coordinates of accessible
             neighbors to the direction taken to reach them.
         """
         neighbours: dict[tuple[int, int], str] = {}
@@ -369,8 +371,8 @@ class Grid:
             elif direction == "W":
                 y -= 1
             else:
-                raise ValueError("Grid.connect_cells() - invalid argument 'path' "
-                                 f"with direction '{direction}'")
+                raise ValueError("Grid.connect_cells() - invalid argument "
+                                 f"'path' with direction '{direction}'")
             self.get_cell(x, y).visit()
             self.get_cell(x, y).add_to_forty_two()
 
@@ -443,7 +445,7 @@ class Grid:
         Returns
         -------
         bool
-            True if the 3x3 area around (x, y) has no internal standing walls, 
+            True if the 3x3 area around (x, y) has no internal standing walls,
             False otherwise.
         """
         for m in [x - 1, x, x + 1]:
