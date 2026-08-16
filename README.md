@@ -106,7 +106,7 @@ The core maze logic (generation, solving, and display) is implemented as a self-
 ```python
 from mazegen import MazeGenerator
 
-maze = MazeGenerator(width=20, height=15, entry=(0, 0), exit=(19, 14), perfect=True)
+maze = MazeGenerator(width=20, height=15, entry=(0, 0), exit=(19, 14), output_file="maze.txt", perfect=True)
 maze.generate()
 maze.solve()
 maze.display()
@@ -201,9 +201,21 @@ Create an instance of the class with the desired parameters:
 from mazegen import MazeGenerator
 
 # Creating a 20x15 maze, entry at [0,0], exit at [19,14]
-maze = MazeGenerator(width=20, height=15, entry=(0,0), exit=(19,14), perfect=False, seed=42)
+maze = MazeGenerator(width=20, height=15, entry=(0,0), exit=(19,14), output_file="maze.txt", perfect=False, seed=42)
 ```
 *The `perfect` (whether the maze will have no loops, defaults to False) and `seed` (for reproducibility) parameters are optional.*
+
+**Custom Parameters:**
+The parameters correspond to the grid as follows:
+
+* **Width:** The number of columns.
+* **Height:** The number of rows.
+* **Entry and Exit:** Tuples in the format `(x, y)`, where `x` represents the column and `y` represents the row.
+
+Besides the mandatory `width`, `height`, `entry`, `exit` and `output_file`, two optional parameters are available:
+
+- `perfect` (`bool`, default `False`) — if `True`, generates a perfect maze (exactly one path between entry and exit).
+- `seed` (default `None`) — sets the random seed, so the same parameters always produce the same maze.
 
 **Basic Sequence of Methods:**
 The methods should be called in this logical order:
